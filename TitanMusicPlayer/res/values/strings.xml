@@ -3,12 +3,25 @@
 
     <string name="app_name">Titan Music Player</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="no_songs">No Songs</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="search">Search</string>
     <string name="settings">Settings</string>
     <string name="add_to_playlist">Add to Playlist</string>
     <string name="delete">Delete</string>
-
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="next">Skip Forward</string>
+    <string name="previous">Skip Back</string>
+    <string name="empty_queue">No Songs In Queue</string>
+    <string name="browse_artists">Browse Artists</string>
+    <string name="browse_playlists">Browse Playlists</string>
+    <string name="browse_albums">Browse Albums</string>
+    <string name="title_activity_browse_library">Browse Library</string>
+    <string name="library">Library</string>
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="playlists">Playlists</string>
+    
 </resources>

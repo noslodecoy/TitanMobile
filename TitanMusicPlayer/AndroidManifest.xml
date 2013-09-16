@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +20,16 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.titanmusicplayer.BrowseLibrary"
+            android:label="@string/app_name"
+            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            <intent-filter>
+                <action android:name="android.intent.action.BROWSELIBRARY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

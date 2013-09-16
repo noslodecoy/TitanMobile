@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/no_margin"
+    android:background="#DDDDDD"
+    android:gravity="center"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MusicPlayer" >
+
+    <TextView
+        android:id="@+id/txtCurrentlyPlaying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/empty_queue"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtCurrentlyPlaying" />
+
+    <ImageButton
+        android:id="@+id/btnPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar1"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:contentDescription="@string/play"
+        android:paddingBottom="@dimen/vertical_music_control_padding"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/vertical_music_control_padding"
+        android:src="@drawable/play" />
+
+    <ImageButton
+        android:id="@+id/btnSkipBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar1"
+        android:layout_toLeftOf="@+id/btnPlay"
+        android:background="@null"
+        android:contentDescription="@string/previous"
+        android:paddingBottom="@dimen/vertical_music_control_padding"
+        android:paddingLeft="@dimen/horizontal_music_control_padding"
+        android:paddingRight="@dimen/horizontal_music_control_padding"
+        android:paddingTop="@dimen/vertical_music_control_padding"
+        android:src="@drawable/previous" />
+
+    <ImageButton
+        android:id="@+id/btnSkipForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnPlay"
+        android:layout_toRightOf="@+id/btnPlay"
+        android:background="@null"
+        android:contentDescription="@string/next"
+        android:paddingBottom="@dimen/vertical_music_control_padding"
+        android:paddingLeft="@dimen/horizontal_music_control_padding"
+        android:paddingRight="@dimen/horizontal_music_control_padding"
+        android:paddingTop="@dimen/vertical_music_control_padding"
+        android:src="@drawable/next" />
+
+</RelativeLayout>

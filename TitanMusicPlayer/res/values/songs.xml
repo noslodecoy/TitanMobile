@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="song_artists">
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>Alabama Shakes</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+        <item>The Bottle Rockets</item>
+    </array>
+    <array name="song_albums">
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>Boys &amp; Girls</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+        <item>24 Hours A Day</item>
+    </array>
+    <array name="song_titles">
+        <item>Hold On</item>
+        <item>I Found You</item>
+        <item>Hang Loose</item>
+        <item>Rise To The Sun</item>
+        <item>You Ain\'t Alone</item>
+        <item>Goin\' To The Party</item>
+        <item>Heartbreaker</item>
+        <item>Boys &amp; Girls</item>
+        <item>Be Mine</item>
+        <item>I Ain\'t the Same</item>
+        <item>On Your Way</item>
+        <item>Heavy Chevy (Bonus Track)</item>
+        <item>Kit Kat Clock</item>
+        <item>When I Was Dumb</item>
+        <item>24 Hours A Day</item>
+        <item>Smokin\' 100\'s Alone</item>
+        <item>Slo Toms</item>
+        <item>Indianapolis</item>
+        <item>Things You Didn\'t Know</item>
+        <item>One Of You</item>
+        <item>Perfect Far Away</item>
+        <item>Waitin\' On A Train</item>
+        <item>Dohack Joe</item>
+        <item>Rich Man</item>
+        <item>Turn For The Worse</item>
+    </array>
+    <array name="song_tracks">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+    </array>
+
+</resources>

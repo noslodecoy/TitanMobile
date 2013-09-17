@@ -14,8 +14,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.titanmusicplayer.MusicPlayer"
-            android:label="@string/app_name" >
+            android:name="com.example.titanmusicplayer.MainActivity"
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,8 +23,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.example.titanmusicplayer.MusicPlayer"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MUSICPLAYER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.example.titanmusicplayer.BrowseLibrary"
-            android:label="@string/app_name"
+            android:label="@string/library"
             android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSELIBRARY" />
@@ -32,6 +41,27 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.titanmusicplayer.BrowseArtists"
+            android:label="@string/artists"
+            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            <intent-filter>
+                <action android:name="android.intent.action.BROWSEARTISTS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.titanmusicplayer.BrowseAlbums"
+            android:label="@string/albums"
+            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            <intent-filter>
+                <action android:name="android.intent.action.BROWSEALBUMS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

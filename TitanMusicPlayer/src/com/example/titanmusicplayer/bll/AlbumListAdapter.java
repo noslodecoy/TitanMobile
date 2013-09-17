@@ -8,15 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 //SongArrayAdapter
-public class SongAdapter extends ArrayAdapter<Song> {
+public class AlbumListAdapter extends ArrayAdapter<Album> {
 
-	private Context context;
-	private ArrayList<Song> songs;
+	private ArrayList<Album> albums;
 
-	public SongAdapter(Context context, int layoutResId, ArrayList<Song> songs) {
-		super(context, layoutResId, songs);
-		this.context = context;
-		this.songs = songs;
+	public AlbumListAdapter(Context context, int layoutResId,
+			int textViewResourceId, ArrayList<Album> albums) {
+		super(context, layoutResId, textViewResourceId, albums);
+		this.albums = albums;
 	}
 
 	@Override
@@ -24,11 +23,9 @@ public class SongAdapter extends ArrayAdapter<Song> {
 		View view = super.getView(position, convertView, parent);
 		TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 		TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-
-		Song song = songs.get(position);
-
-		text1.setText(song.getTitle());
-		text2.setText(song.getArtistAlbum());
+		Album album = albums.get(position);
+		text1.setText(album.toString());
+		text2.setText(album.getArtist().toString());
 		return view;
 	}
 }

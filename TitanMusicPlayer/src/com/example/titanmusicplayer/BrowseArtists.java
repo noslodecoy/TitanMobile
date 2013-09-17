@@ -1,19 +1,19 @@
 package com.example.titanmusicplayer;
 
+import com.example.titanmusicplayer.bll.ArtistListAdapter;
 import com.example.titanmusicplayer.bll.Session;
-import com.example.titanmusicplayer.bll.SongListAdapter;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.widget.ListView;
 
-public class BrowseLibrary extends Activity {
+public class BrowseArtists extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_browse_library);
+		setContentView(R.layout.activity_browse_artists);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		this.updateQueueList();
@@ -27,10 +27,10 @@ public class BrowseLibrary extends Activity {
 	}
 
 	private void updateQueueList() {
-		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this,
+		ListView songList = (ListView) findViewById(R.id.browseArtistsListView);
+		ArtistListAdapter adapter = new ArtistListAdapter(this,
 				android.R.layout.simple_list_item_2, android.R.id.text1,
-				Session.user.library.getSongs());
+				Session.user.library.getArtists());
 		songList.setAdapter(adapter);
 	}
 

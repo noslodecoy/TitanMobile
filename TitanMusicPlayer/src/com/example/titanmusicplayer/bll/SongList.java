@@ -2,10 +2,6 @@ package com.example.titanmusicplayer.bll;
 
 import java.util.*;
 
-import android.content.Context;
-
-import com.example.titanmusicplayer.dal.SongDAO;
-
 public class SongList {
 
 	ArrayList<Song> songs;
@@ -22,6 +18,11 @@ public class SongList {
 	}
 
 	public String getName() {
+		return this.toString();
+	}
+
+	@Override
+	public String toString() {
 		return this.label;
 	}
 
@@ -80,11 +81,6 @@ public class SongList {
 
 	public void remove(int i) {
 		remove(this.songs.get(i));
-	}
-	
-	public void fetchAll( Context dataSource ) {
-		SongDAO songDAO = new SongDAO();
-		this.addAll(songDAO.getSongsFromResource(dataSource));
 	}
 
 }

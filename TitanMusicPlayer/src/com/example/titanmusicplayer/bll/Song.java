@@ -11,8 +11,7 @@ public class Song {
 	// song info from database
 	private Long id;
 	private String title;
-	private String artist;
-	private String album;
+	private Album album;
 	private int track;
 	private int songLength;
 
@@ -23,9 +22,8 @@ public class Song {
 	public Song(File inFile) {
 	}
 
-	public Song(String artist, String album, int track, String title) {
+	public Song(Album album, int track, String title) {
 		this.isEmpty = false;
-		this.artist = artist;
 		this.album = album;
 		this.track = track;
 		this.title = title;
@@ -39,19 +37,11 @@ public class Song {
 		return this.id;
 	}
 
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}
-
-	public String getArtist() {
-		return this.artist;
-	}
-
-	public String getAlbum() {
+	public Album getAlbum() {
 		return this.album;
 	}
 
-	public void setAlbum(String album) {
+	public void setAlbum(Album album) {
 		this.album = album;
 	}
 
@@ -98,15 +88,18 @@ public class Song {
 		this.songLength = length;
 	}
 
-	public boolean equals(Song songToCompare) {
-		if (this == songToCompare) {
+	public boolean equals(Song song) {
+		if (this == song) {
 			return true;
 		}
-		return (this.getTitle().equals(songToCompare.getTitle()) && this.getArtist().equals(songToCompare.getArtist()));
+		return (this.getAlbum().equals(song.getAlbum())
+				&& this.getTrackNumber() == song.getTrackNumber() && this
+				.getTitle().equals(song.getTitle()));
 	}
 
 	public String getArtistAlbum() {
-		return this.getArtist() + " - " + this.getAlbum();
+		return this.getAlbum().getArtist().toString() + " - "
+				+ this.getAlbum().toString();
 	}
 
 	public boolean isEmpty() {
@@ -117,18 +110,22 @@ public class Song {
 
 		@Override
 		public int compare(Song song1, Song song2) {
-			String songName1 = song1.getTitle().toLowerCase(Locale.getDefault());
-			String songName2 = song2.getTitle().toUpperCase(Locale.getDefault());
+			String songName1 = song1.getTitle()
+					.toLowerCase(Locale.getDefault());
+			String songName2 = song2.getTitle()
+					.toUpperCase(Locale.getDefault());
 			return songName1.compareTo(songName2);
 		}
 
 	};
 
-	public static Comparator<Song> CompareByArtist = new Comparator<Song>() {
+	public static Comparator<Song> CompareByAlbum = new Comparator<Song>() {
 		@Override
 		public int compare(Song song1, Song song2) {
-			String songName1 = song1.getArtist().toUpperCase(Locale.getDefault());
-			String songName2 = song2.getArtist().toUpperCase(Locale.getDefault());
+			String songName1 = song1.getAlbum().toString()
+					.toUpperCase(Locale.getDefault());
+			String songName2 = song2.getAlbum().toString()
+					.toUpperCase(Locale.getDefault());
 			return songName1.compareTo(songName2);
 		}
 	};

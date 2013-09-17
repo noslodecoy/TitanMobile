@@ -1,4 +1,4 @@
-package com.example.titanmusicplayer.bll;
+package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 import android.content.Context;

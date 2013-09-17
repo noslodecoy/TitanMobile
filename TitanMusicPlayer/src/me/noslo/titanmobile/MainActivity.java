@@ -1,6 +1,6 @@
-package com.example.titanmusicplayer;
+package me.noslo.titanmobile;
 
-import com.example.titanmusicplayer.bll.Session;
+import me.noslo.titanmobile.bll.Session;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;

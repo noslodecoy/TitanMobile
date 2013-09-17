@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.titanmusicplayer.MainActivity"
+            android:name="me.noslo.titanmobile.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.titanmusicplayer.MusicPlayer"
+            android:name="me.noslo.titanmobile.MusicPlayer"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MUSICPLAYER" />
@@ -32,9 +32,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.titanmusicplayer.BrowseLibrary"
+            android:name="me.noslo.titanmobile.BrowseLibrary"
             android:label="@string/library"
-            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            android:parentActivityName="me.noslo.titanmobile.MusicPlayer" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSELIBRARY" />
 
@@ -42,9 +42,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.titanmusicplayer.BrowseArtists"
+            android:name="me.noslo.titanmobile.BrowseArtists"
             android:label="@string/artists"
-            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            android:parentActivityName="me.noslo.titanmobile.MusicPlayer" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEARTISTS" />
 
@@ -52,9 +52,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.titanmusicplayer.BrowseAlbums"
+            android:name="me.noslo.titanmobile.BrowseAlbums"
             android:label="@string/albums"
-            android:parentActivityName="com.example.titanmusicplayer.MusicPlayer" >
+            android:parentActivityName="me.noslo.titanmobile.MusicPlayer" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEALBUMS" />
 

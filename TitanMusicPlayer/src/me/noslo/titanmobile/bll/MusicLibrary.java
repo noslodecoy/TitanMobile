@@ -1,9 +1,10 @@
-package com.example.titanmusicplayer.bll;
+package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
+
+import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import android.content.Context;
 
-import com.example.titanmusicplayer.dal.MusicLibraryDAO;
 
 public class MusicLibrary {
 
@@ -24,6 +25,10 @@ public class MusicLibrary {
 	}
 
 	public void sync(Context context) {
+		this.artists = new ArrayList<Artist>();
+		this.albums = new ArrayList<Album>();
+		this.songs = new ArrayList<Song>();
+		
 		ArrayList<ArrayList<String>> list = MusicLibraryDAO.fetchArrayList(
 				context, user);
 

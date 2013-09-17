@@ -1,7 +1,10 @@
-package com.example.titanmusicplayer;
+package me.noslo.titanmobile;
 
-import com.example.titanmusicplayer.bll.AlbumListAdapter;
-import com.example.titanmusicplayer.bll.Session;
+import me.noslo.titanmobile.bll.AlbumListAdapter;
+import me.noslo.titanmobile.bll.Session;
+
+import com.example.titanmusicplayer.R;
+
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;

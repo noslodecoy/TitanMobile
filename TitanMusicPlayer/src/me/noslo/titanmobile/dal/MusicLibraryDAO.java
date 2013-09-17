@@ -1,12 +1,13 @@
-package com.example.titanmusicplayer.dal;
+package me.noslo.titanmobile.dal;
 
 import java.util.ArrayList;
+
+import me.noslo.titanmobile.bll.User;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import com.example.titanmusicplayer.R;
-import com.example.titanmusicplayer.bll.User;
 
 public class MusicLibraryDAO {
 

@@ -1,4 +1,4 @@
-package com.example.titanmusicplayer.bll;
+package me.noslo.titanmobile.bll;
 
 public class Session {
 	static public User user;

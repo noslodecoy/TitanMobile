@@ -56,6 +56,10 @@ public class Song {
 	public String getTitle() {
 		return this.title;
 	}
+	
+	public String toString() {
+		return this.title;
+	}
 
 	public void setTitle(String title) {
 		this.title = title;

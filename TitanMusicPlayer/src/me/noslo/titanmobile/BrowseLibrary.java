@@ -31,9 +31,7 @@ public class BrowseLibrary extends Activity {
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this,
-				android.R.layout.simple_list_item_2, android.R.id.text1,
-				Session.user.library.getSongs());
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, Session.user.library.getSongs());
 		songList.setAdapter(adapter);
 	}
 

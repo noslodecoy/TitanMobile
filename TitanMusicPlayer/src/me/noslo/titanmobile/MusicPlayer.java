@@ -2,9 +2,7 @@ package me.noslo.titanmobile;
 
 import me.noslo.titanmobile.bll.Session;
 import me.noslo.titanmobile.bll.SongListAdapter;
-
 import com.example.titanmusicplayer.R;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,9 +66,8 @@ public class MusicPlayer extends Activity implements OnItemClickListener {
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
-		SongListAdapter adapter = new SongListAdapter(this,
-				android.R.layout.simple_list_item_2, android.R.id.text1,
-				Session.user.library.getSongs());
+
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, Session.user.library.getSongs());
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}

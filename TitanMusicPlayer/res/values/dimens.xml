@@ -6,5 +6,6 @@
     <dimen name="no_margin">0dp</dimen>
     <dimen name="horizontal_music_control_padding">10dp</dimen>
     <dimen name="vertical_music_control_padding">0dp</dimen>
-
+    <dimen name="song_list_item_margin">5dp</dimen>
+    
 </resources>

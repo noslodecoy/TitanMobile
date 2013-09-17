@@ -12,8 +12,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// TODO: Check login information here.  If not logged in, goto login form.
 		Session.newSession();
-		Intent intent = new Intent(this, MusicPlayer.class);
+		Intent intent = new Intent(this, LoginActivity.class);
 		startActivity(intent);
+
 	}
 
 }

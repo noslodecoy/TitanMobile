@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-public class MainActivity extends Activity {
+public class TitanMobileActivity extends Activity {
 
 	public static final String SHARED_PREFS = "me.noslo.titanmobile.PREFS";
 
@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
 		// Check login information here. If not logged in, request credentials.
 
 		SharedPreferences settings = getSharedPreferences(
-				MainActivity.SHARED_PREFS, 0);
+				TitanMobileActivity.SHARED_PREFS, 0);
 		String username = settings.getString("username", null);
 		String password = settings.getString("password", null);
 

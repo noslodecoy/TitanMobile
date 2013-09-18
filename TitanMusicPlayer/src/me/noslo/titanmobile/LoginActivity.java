@@ -246,7 +246,7 @@ public class LoginActivity extends Activity {
 				Session.login(mEmail, "");
 
 				SharedPreferences settings = getApplicationContext()
-						.getSharedPreferences(MainActivity.SHARED_PREFS, 0); // 0
+						.getSharedPreferences(TitanMobileActivity.SHARED_PREFS, 0); // 0
 																				// -
 																				// for
 																				// private

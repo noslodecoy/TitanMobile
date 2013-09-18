@@ -11,7 +11,7 @@ import android.app.Activity;
 import android.view.Menu;
 import android.widget.ListView;
 
-public class BrowseArtists extends Activity {
+public class BrowseArtistsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

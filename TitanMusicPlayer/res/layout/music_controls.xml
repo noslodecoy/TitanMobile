@@ -6,7 +6,7 @@
     android:background="#DDDDDD"
     android:gravity="center"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MusicPlayer" >
+    tools:context=".MediaPlayerActivity" >
 
     <TextView
         android:id="@+id/txtCurrentlyPlaying"
@@ -37,7 +37,8 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/vertical_music_control_padding"
-        android:src="@drawable/play" />
+        android:src="@drawable/play"
+        android:onClick="togglePlay" />
 
     <ImageButton
         android:id="@+id/btnSkipBack"
@@ -51,7 +52,8 @@
         android:paddingLeft="@dimen/horizontal_music_control_padding"
         android:paddingRight="@dimen/horizontal_music_control_padding"
         android:paddingTop="@dimen/vertical_music_control_padding"
-        android:src="@drawable/previous" />
+        android:src="@drawable/previous"
+        android:onClick="skipBackward" />
 
     <ImageButton
         android:id="@+id/btnSkipForward"
@@ -65,6 +67,7 @@
         android:paddingLeft="@dimen/horizontal_music_control_padding"
         android:paddingRight="@dimen/horizontal_music_control_padding"
         android:paddingTop="@dimen/vertical_music_control_padding"
-        android:src="@drawable/next" />
+        android:src="@drawable/next"
+        android:onClick="skipForward" />
 
 </RelativeLayout>

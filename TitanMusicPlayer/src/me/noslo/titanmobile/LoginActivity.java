@@ -1,5 +1,7 @@
 package me.noslo.titanmobile;
 
+import me.noslo.titanmobile.bll.Session;
+
 import com.example.titanmusicplayer.R;
 import com.example.titanmusicplayer.R.id;
 import com.example.titanmusicplayer.R.layout;
@@ -11,10 +13,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -36,7 +41,8 @@ public class LoginActivity extends Activity {
 	/**
 	 * The default email to populate the email field with.
 	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+	public static final String EXTRA_EMAIL = "me.noslo.titanmobile.extra.EMAIL";
+	public static final String EXTRA_PASSWORD = "me.noslo.titanmobile.extra.PASSWORD";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -62,9 +68,11 @@ public class LoginActivity extends Activity {
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
+
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
-
+		
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
@@ -76,6 +84,7 @@ public class LoginActivity extends Activity {
 				return false;
 			}
 		});
+		mPasswordView.setText(mPassword);
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
@@ -87,6 +96,14 @@ public class LoginActivity extends Activity {
 				attemptLogin();
 			}
 		});
+		
+		
+		if (mEmail != null && mPassword != null ) {
+			Log.v( "email", mEmail );
+			Log.v( "email", mPassword );
+			attemptLogin();
+		}
+		
 	}
 
 	@Override
@@ -198,7 +215,7 @@ public class LoginActivity extends Activity {
 
 			try {
 				// Simulate network access.
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				return false;
 			}
@@ -222,11 +239,19 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				finish();
+				Session.login( mEmail, "" );
 				
-				Intent intent = new Intent(getApplicationContext(), MusicPlayer.class);
+				SharedPreferences settings = getApplicationContext().getSharedPreferences(MainActivity.SHARED_PREFS, 0); // 0 - for private mode
+				Editor editor = settings.edit();
+				editor.putString("username", mEmail); // Storing string
+				editor.putString("password", mPassword); // Storing string
+				editor.commit();
+
+				Intent intent = new Intent(getApplicationContext(), MediaPlayerActivity.class);
 				startActivity(intent);
 				
 			} else {
+				mPassword = null;
 				mPasswordView.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}

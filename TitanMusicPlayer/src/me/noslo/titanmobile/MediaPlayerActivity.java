@@ -1,20 +1,28 @@
 package me.noslo.titanmobile;
 
+import me.noslo.titanmobile.bll.MediaPlayer;
 import me.noslo.titanmobile.bll.Session;
+import me.noslo.titanmobile.bll.SongList;
 import me.noslo.titanmobile.bll.SongListAdapter;
 import com.example.titanmusicplayer.R;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 
-public class MusicPlayer extends Activity implements OnItemClickListener {
+public class MediaPlayerActivity extends Activity implements
+		OnItemClickListener {
+
+	private MediaPlayer mediaPlayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +30,10 @@ public class MusicPlayer extends Activity implements OnItemClickListener {
 		setContentView(R.layout.activity_music_player);
 
 		Session.user.library.sync(this);
+
+		SongList queue = new SongList();
+		queue.addAll(Session.getStoredQueue());
+		this.mediaPlayer = new MediaPlayer(queue);
 
 		updateQueueList();
 	}
@@ -33,6 +45,43 @@ public class MusicPlayer extends Activity implements OnItemClickListener {
 		return true;
 	}
 
+	public void play() {
+		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
+		btn.setImageResource(R.drawable.pause);
+		mediaPlayer.play();
+		showNowPlayingDialog();
+	}
+
+	public void pause() {
+		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
+		btn.setImageResource(R.drawable.play);
+		mediaPlayer.pause();
+	}
+
+	public void togglePlay(View view) {
+		if (mediaPlayer.isPlaying()) {
+			pause();
+		} else {
+			play();
+		}
+	}
+
+	public void showNowPlayingDialog() {
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		alertDialog.setTitle("Play Song");
+		alertDialog.setMessage("Playing "
+				+ this.mediaPlayer.getSong().getTitle());
+		alertDialog.show();
+	}
+
+	public void skipForward(View view) {
+		mediaPlayer.skipForward();
+	}
+
+	public void skipBackward(View view) {
+		mediaPlayer.skipBackward();
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
@@ -42,12 +91,12 @@ public class MusicPlayer extends Activity implements OnItemClickListener {
 			return true;
 		}
 		case R.id.action_browse_artists: {
-			Intent intent = new Intent(this, BrowseArtists.class);
+			Intent intent = new Intent(this, BrowseArtistsActivity.class);
 			startActivity(intent);
 			return true;
 		}
 		case R.id.action_browse_albums: {
-			Intent intent = new Intent(this, BrowseAlbums.class);
+			Intent intent = new Intent(this, BrowseAlbumsActivity.class);
 			startActivity(intent);
 			return true;
 		}
@@ -57,17 +106,15 @@ public class MusicPlayer extends Activity implements OnItemClickListener {
 	}
 
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		alertDialog.setTitle("Play Song");
-		alertDialog.setMessage("Playing "
-				+ Session.user.library.getSongs().get((int) id).getTitle());
-		alertDialog.show();
+		mediaPlayer.setPosition(position);
+		play();
 	}
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, Session.user.library.getSongs());
+		SongListAdapter adapter = new SongListAdapter(this,
+				R.layout.song_list_item, this.mediaPlayer.getQueue().getAll());
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}

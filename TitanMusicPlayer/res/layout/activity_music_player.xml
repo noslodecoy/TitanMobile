@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/no_margin"
     android:paddingTop="@dimen/no_margin"
     android:textAlignment="center"
-    tools:context=".MusicPlayer" >
+    tools:context=".MediaPlayerActivity" >
 
     <include
         android:id="@+id/musicControls"

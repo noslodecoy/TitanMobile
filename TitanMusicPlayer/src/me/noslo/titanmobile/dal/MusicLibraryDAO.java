@@ -1,9 +1,7 @@
 package me.noslo.titanmobile.dal;
 
 import java.util.ArrayList;
-
 import me.noslo.titanmobile.bll.User;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;

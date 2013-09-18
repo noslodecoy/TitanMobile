@@ -2,9 +2,7 @@ package me.noslo.titanmobile;
 
 import me.noslo.titanmobile.bll.Session;
 import me.noslo.titanmobile.bll.SongListAdapter;
-
 import com.example.titanmusicplayer.R;
-
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -31,7 +29,8 @@ public class BrowseLibraryActivity extends Activity {
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, Session.user.library.getSongs());
+		SongListAdapter adapter = new SongListAdapter(this,
+				R.layout.song_list_item, Session.user.library.getSongs());
 		songList.setAdapter(adapter);
 	}
 

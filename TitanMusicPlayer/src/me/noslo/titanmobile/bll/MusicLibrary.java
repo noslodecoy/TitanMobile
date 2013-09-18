@@ -1,10 +1,8 @@
 package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
-
 import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import android.content.Context;
-
 
 public class MusicLibrary {
 
@@ -28,7 +26,7 @@ public class MusicLibrary {
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();
 		this.songs = new ArrayList<Song>();
-		
+
 		ArrayList<ArrayList<String>> list = MusicLibraryDAO.fetchArrayList(
 				context, user);
 
@@ -38,7 +36,7 @@ public class MusicLibrary {
 
 			Artist artist = this.addArtist(listItem.get(0));
 			Album album = this.addAlbum(artist, listItem.get(1));
-			this.addSong( album, trackNumber, titleString );
+			this.addSong(album, trackNumber, titleString);
 		}
 
 	}
@@ -72,10 +70,10 @@ public class MusicLibrary {
 		}
 		return albums.get(albums.indexOf(album));
 	}
-	
-	public Song addSong( Album album, int trackNumber, String titleString ) {
-		Song song = new Song( album, trackNumber, titleString );
-		this.songs.add( song );
+
+	public Song addSong(Album album, int trackNumber, String titleString) {
+		Song song = new Song(album, trackNumber, titleString);
+		this.songs.add(song);
 		return song;
 	}
 

@@ -17,7 +17,8 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 	private Context context;
 	private ArrayList<Song> songs;
 
-	public SongListAdapter(Context context, int layoutResId, ArrayList<Song> songs) {
+	public SongListAdapter(Context context, int layoutResId,
+			ArrayList<Song> songs) {
 		super(context, layoutResId, songs);
 		this.layoutResId = layoutResId;
 		this.context = context;

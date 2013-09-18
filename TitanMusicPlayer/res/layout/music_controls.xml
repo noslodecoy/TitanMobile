@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/empty_queue"
+        android:text=""
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

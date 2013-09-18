@@ -9,6 +9,10 @@ public class User {
 		library = new MusicLibrary(this);
 	}
 
+	public String getUsername() {
+		return this.username;
+	}
+
 	public void setUserName(String username) {
 		this.username = username;
 	}

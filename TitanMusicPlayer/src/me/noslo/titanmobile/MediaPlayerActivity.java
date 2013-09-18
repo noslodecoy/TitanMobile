@@ -7,13 +7,12 @@ import me.noslo.titanmobile.bll.SongListAdapter;
 import com.example.titanmusicplayer.R;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,6 +48,7 @@ public class MediaPlayerActivity extends Activity implements
 		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
 		btn.setImageResource(R.drawable.pause);
 		mediaPlayer.play();
+		updateCurrentlyPlaying();
 		showNowPlayingDialog();
 	}
 
@@ -56,6 +56,7 @@ public class MediaPlayerActivity extends Activity implements
 		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
 		btn.setImageResource(R.drawable.play);
 		mediaPlayer.pause();
+		updateCurrentlyPlaying();
 	}
 
 	public void togglePlay(View view) {
@@ -64,6 +65,15 @@ public class MediaPlayerActivity extends Activity implements
 		} else {
 			play();
 		}
+	}
+
+	public void updateCurrentlyPlaying() {
+		String txt = "";
+		if (mediaPlayer.isPlaying()) {
+			txt = mediaPlayer.getSong().getTitle();
+		}
+		TextView txtCurrentlyPlaying = (TextView) findViewById(R.id.txtCurrentlyPlaying);
+		txtCurrentlyPlaying.setText(txt);
 	}
 
 	public void showNowPlayingDialog() {
@@ -108,13 +118,30 @@ public class MediaPlayerActivity extends Activity implements
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		mediaPlayer.setPosition(position);
 		play();
+		updateList();
+	}
+
+	private void updateList() {
+		// ListView songList = (ListView)
+		// findViewById(R.id.currentlyPlayingQueue);
+		// for (int i = 0; i < songList.getAdapter().getCount(); i++) {
+		// Log.v("test", i + " == " + mediaPlayer.getPosition());
+		// View v = songList.getAdapter().getView(i, null, songList);
+		// ImageView img = (ImageView) v.findViewById(R.id.isPlaying);
+		// if (i == mediaPlayer.getPosition()) {
+		// img.setImageResource(R.drawable.play);
+		// } else {
+		// img.setImageResource(R.drawable.blank);
+		// }
+		// }
+		// ImageView img = (ImageView) v.findViewById( R.id.isPlaying);
+		// img.setImageResource(R.drawable.play);
 	}
 
 	private void updateQueueList() {
-		ListView songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
-
 		SongListAdapter adapter = new SongListAdapter(this,
 				R.layout.song_list_item, this.mediaPlayer.getQueue().getAll());
+		ListView songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}

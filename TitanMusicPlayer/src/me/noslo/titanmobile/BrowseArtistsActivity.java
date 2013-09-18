@@ -2,9 +2,7 @@ package me.noslo.titanmobile;
 
 import me.noslo.titanmobile.bll.ArtistListAdapter;
 import me.noslo.titanmobile.bll.Session;
-
 import com.example.titanmusicplayer.R;
-
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;

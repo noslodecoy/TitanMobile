@@ -26,7 +26,7 @@ public class MediaPlayer {
 		}
 		return null;
 	}
-	
+
 	public Song getCurrentSong() {
 		return getSong();
 	}

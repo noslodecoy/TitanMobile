@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Session {
+public class TitanMobile {
 	static public User user;
 	static public String sessionKey;
+	static public MediaPlayer mediaPlayer;
 
 	static public void newSession() {
 		user = new User();
 	}
 
 	static public void login(String username, String sessionKey) {
-		Session.sessionKey = sessionKey;
+		TitanMobile.sessionKey = sessionKey;
 		user = new User();
 		user.setUserName(username);
-		Session.sessionKey = sessionKey;
+		TitanMobile.sessionKey = sessionKey;
 	}
 
 	public static List<Song> getStoredQueue() {
@@ -24,9 +25,9 @@ public class Session {
 		ArrayList<Song> queue = new ArrayList<Song>();
 		Random randomGenerator = new Random();
 		for (int i = 0; i < 8; i++) {
-			int index = randomGenerator.nextInt(Session.user.library.getSongs()
-					.size());
-			queue.add(Session.user.library.getSongs().get(index));
+//			int songCount = TitanMobile.user.library.getSongs().size();
+//			int index = randomGenerator.nextInt( songCount );
+//			queue.add(TitanMobile.user.library.getSongs().get(index));
 		}
 
 		return queue;

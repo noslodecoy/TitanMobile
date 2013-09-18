@@ -6,7 +6,7 @@ public class SongList {
 
 	ArrayList<Song> songs;
 	private String label;
-	private long id;
+	private int id;
 
 	public SongList() {
 		this.songs = new ArrayList<Song>();
@@ -30,11 +30,11 @@ public class SongList {
 		this.label = label;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public long getId() {
+	public int getId() {
 		return this.id;
 	}
 
@@ -81,6 +81,13 @@ public class SongList {
 
 	public void remove(int i) {
 		remove(this.songs.get(i));
+	}
+
+	public void replaceAll(List<Song> songs) {
+		this.songs = new ArrayList<Song>();
+		for (Song song : songs) {
+			this.add(song);
+		}
 	}
 
 }

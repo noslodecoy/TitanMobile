@@ -9,7 +9,7 @@ public class Song {
 	private boolean isEmpty;
 
 	// song info from database
-	private Long id;
+	private int id;
 	private String title;
 	private Album album;
 	private int track;
@@ -22,6 +22,14 @@ public class Song {
 	public Song(File inFile) {
 	}
 
+	public Song(int id, Album album, int track, String title) {
+		this.id = id;
+		this.isEmpty = false;
+		this.album = album;
+		this.track = track;
+		this.title = title;
+	}
+	
 	public Song(Album album, int track, String title) {
 		this.isEmpty = false;
 		this.album = album;
@@ -29,11 +37,11 @@ public class Song {
 		this.title = title;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return this.id;
 	}
 

@@ -24,5 +24,7 @@
     <string name="albums">Albums</string>
     <string name="playlists">Playlists</string>
     <string name="title_activity_main">MainActivity</string>
-
+    <string name="remove_song">Remove Song</string>
+    <string name="add_song_to_queue">Add Song to Queue</string>
+    
 </resources>

@@ -1,5 +1,7 @@
 package me.noslo.titanmobile;
 
+import me.noslo.titanmobile.bll.MediaPlayer;
+import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +14,9 @@ public class TitanMobileActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		MusicLibraryDAO.context = this;
+		
 		// Check login information here. If not logged in, request credentials.
 
 		SharedPreferences settings = getSharedPreferences(

@@ -1,6 +1,6 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.Session;
+import me.noslo.titanmobile.bll.TitanMobile;
 import com.example.titanmusicplayer.R;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,7 +31,7 @@ public class LoginActivity extends Activity {
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
+			"fooo@example.com:hello", "bar@example.com:world" };
 
 	/**
 	 * The default email to populate the email field with.
@@ -233,7 +233,7 @@ public class LoginActivity extends Activity {
 			}
 
 			// TODO: register the new account here.
-			return true;
+			return false;
 		}
 
 		@Override
@@ -243,7 +243,7 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				finish();
-				Session.login(mEmail, "");
+				TitanMobile.login(mEmail, "");
 
 				SharedPreferences settings = getApplicationContext()
 						.getSharedPreferences(TitanMobileActivity.SHARED_PREFS, 0); // 0

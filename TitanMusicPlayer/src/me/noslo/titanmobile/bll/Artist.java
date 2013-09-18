@@ -1,9 +1,12 @@
 package me.noslo.titanmobile.bll;
 
 public class Artist extends SongList {
-
+	
+	private static int uniqueId = 0;
+	
 	public Artist(String artist) {
 		super(artist);
+		this.setId( ++uniqueId );
 	}
 
 	@Override

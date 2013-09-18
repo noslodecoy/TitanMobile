@@ -10,43 +10,62 @@ public class MusicLibrary {
 	private ArrayList<Artist> artists;
 	private ArrayList<Album> albums;
 	private ArrayList<Song> songs;
-
+	
 	MusicLibrary(User user) {
 		this.user = user;
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();
 		this.songs = new ArrayList<Song>();
 	}
-
+	
 	public User getUser() {
 		return this.user;
 	}
 
-	public void sync(Context context) {
+	public void sync() {
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();
 		this.songs = new ArrayList<Song>();
 
-		ArrayList<ArrayList<String>> list = MusicLibraryDAO.fetchArrayList(
-				context, user);
+		MusicLibraryDAO.fetchArrayList(user);
+	}
 
-		for (ArrayList<String> listItem : list) {
-			int trackNumber = Integer.parseInt(listItem.get(2));
-			String titleString = listItem.get(3);
-
-			Artist artist = this.addArtist(listItem.get(0));
-			Album album = this.addAlbum(artist, listItem.get(1));
-			this.addSong(album, trackNumber, titleString);
-		}
-
+	public void addSong(Song song) {
+		this.songs.add(song);
 	}
 
 	public ArrayList<Song> getSongs() {
 		return this.songs;
 	}
+	
+	public ArrayList<Song> getSongs( int albumId ) {
+		if ( albumId == 0 ) {
+			return this.songs;
+		}
+		ArrayList<Song> songs = new ArrayList<Song>();
+		for ( Song song : this.songs ) {
+			if ( albumId == song.getAlbum().getId() ) {
+				songs.add( song );
+			}
+		}
+		return songs;
+	}
 
 	public ArrayList<Album> getAlbums() {
 		return this.albums;
+	}
+	
+	public ArrayList<Album> getAlbums( int artistId ) {
+		if ( artistId == 0 ) {
+			return this.albums;
+		}
+		ArrayList<Album> albums = new ArrayList<Album>();
+		for ( Album album : this.albums ) {
+			if ( artistId == album.getArtist().getId() ) {
+				albums.add( album );
+			}
+		}
+		return albums;
 	}
 
 	public ArrayList<Artist> getArtists() {
@@ -71,8 +90,8 @@ public class MusicLibrary {
 		return albums.get(albums.indexOf(album));
 	}
 
-	public Song addSong(Album album, int trackNumber, String titleString) {
-		Song song = new Song(album, trackNumber, titleString);
+	public Song addSong(int id, Album album, int trackNumber, String titleString) {
+		Song song = new Song(id, album, trackNumber, titleString);
 		this.songs.add(song);
 		return song;
 	}

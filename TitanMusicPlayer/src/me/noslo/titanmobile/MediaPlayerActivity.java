@@ -1,15 +1,23 @@
 package me.noslo.titanmobile;
 
 import me.noslo.titanmobile.bll.MediaPlayer;
-import me.noslo.titanmobile.bll.Session;
+import me.noslo.titanmobile.bll.TitanMobile;
+import me.noslo.titanmobile.bll.Song;
 import me.noslo.titanmobile.bll.SongList;
 import me.noslo.titanmobile.bll.SongListAdapter;
 import com.example.titanmusicplayer.R;
+
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,23 +26,26 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 
-public class MediaPlayerActivity extends Activity implements
-		OnItemClickListener {
+public class MediaPlayerActivity extends Activity implements OnItemClickListener {
 
 	private MediaPlayer mediaPlayer;
-
+	private ListView songList;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_music_player);
 
-		Session.user.library.sync(this);
-
-		SongList queue = new SongList();
-		queue.addAll(Session.getStoredQueue());
-		this.mediaPlayer = new MediaPlayer(queue);
+		TitanMobile.mediaPlayer = new MediaPlayer(TitanMobile.user.queue);
+		this.mediaPlayer = TitanMobile.mediaPlayer;
 
 		updateQueueList();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
 	}
 
 	@Override
@@ -79,17 +90,18 @@ public class MediaPlayerActivity extends Activity implements
 	public void showNowPlayingDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle("Play Song");
-		alertDialog.setMessage("Playing "
-				+ this.mediaPlayer.getSong().getTitle());
+		alertDialog.setMessage("Playing " + this.mediaPlayer.getSong().getTitle());
 		alertDialog.show();
 	}
 
 	public void skipForward(View view) {
 		mediaPlayer.skipForward();
+		updateCurrentlyPlaying();
 	}
 
 	public void skipBackward(View view) {
 		mediaPlayer.skipBackward();
+		updateCurrentlyPlaying();
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,6 +133,35 @@ public class MediaPlayerActivity extends Activity implements
 		updateList();
 	}
 
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.song_queue_item, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.remove_queue_item:
+			removeQueueItem(getListItemSong(info.position));
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	protected void removeQueueItem(Song song) {
+		Log.v("REMOVE SONG", song.getTitle());
+		TitanMobile.user.queue.remove(song);
+		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged(); 
+	}
+
+	protected Song getListItemSong(int position) {
+		return (Song) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(position);
+	}
+
 	private void updateList() {
 		// ListView songList = (ListView)
 		// findViewById(R.id.currentlyPlayingQueue);
@@ -139,11 +180,11 @@ public class MediaPlayerActivity extends Activity implements
 	}
 
 	private void updateQueueList() {
-		SongListAdapter adapter = new SongListAdapter(this,
-				R.layout.song_list_item, this.mediaPlayer.getQueue().getAll());
-		ListView songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, TitanMobile.user.queue.getAll());
+		this.songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
+		registerForContextMenu(songList);
 	}
 
 }

@@ -3,10 +3,12 @@ package me.noslo.titanmobile.bll;
 public class Album extends SongList {
 
 	private Artist artist;
+	private static int uniqueId = 0;
 
 	public Album(Artist artist, String label) {
 		super(label);
 		this.artist = artist;
+		this.setId( ++uniqueId );
 	}
 
 	public Artist getArtist() {

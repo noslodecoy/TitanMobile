@@ -26,8 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/musicControls"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
+        android:layout_alignParentTop="true"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/darker_gray" >
     </ListView>
 
 </RelativeLayout>

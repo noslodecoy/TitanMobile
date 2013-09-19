@@ -1,12 +1,8 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.MediaPlayer;
-import me.noslo.titanmobile.bll.TitanMobile;
 import me.noslo.titanmobile.bll.Song;
-import me.noslo.titanmobile.bll.SongList;
-import me.noslo.titanmobile.bll.SongListAdapter;
+import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import com.example.titanmusicplayer.R;
-
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -22,22 +18,18 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 
-public class MediaPlayerActivity extends Activity implements OnItemClickListener {
+public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener {
 
-	private MediaPlayer mediaPlayer;
 	private ListView songList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_music_player);
 
-		TitanMobile.mediaPlayer = new MediaPlayer(TitanMobile.user.queue);
-		this.mediaPlayer = TitanMobile.mediaPlayer;
+		setContentView(R.layout.activity_music_player);
 
 		updateQueueList();
 	}
@@ -46,6 +38,7 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 	protected void onResume() {
 		super.onResume();
 		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
+		drawPlayBtn();
 	}
 
 	@Override
@@ -56,22 +49,28 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 	}
 
 	public void play() {
-		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
-		btn.setImageResource(R.drawable.pause);
-		mediaPlayer.play();
+		app.mediaPlayer.play();
 		updateCurrentlyPlaying();
 		showNowPlayingDialog();
 	}
 
 	public void pause() {
-		ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
-		btn.setImageResource(R.drawable.play);
-		mediaPlayer.pause();
+		app.mediaPlayer.pause();
 		updateCurrentlyPlaying();
 	}
-
+	
+	public void drawPlayBtn() {
+		if ( app.mediaPlayer.isPlaying() ) {
+			ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
+			btn.setImageResource(R.drawable.pause);
+		} else {
+			ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
+			btn.setImageResource(R.drawable.play);
+		}
+	}
+	
 	public void togglePlay(View view) {
-		if (mediaPlayer.isPlaying()) {
+		if (app.mediaPlayer.isPlaying()) {
 			pause();
 		} else {
 			play();
@@ -79,9 +78,10 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 	}
 
 	public void updateCurrentlyPlaying() {
+		drawPlayBtn();
 		String txt = "";
-		if (mediaPlayer.isPlaying()) {
-			txt = mediaPlayer.getSong().getTitle();
+		if (app.mediaPlayer.isPlaying()) {
+			txt = app.mediaPlayer.getSong().getTitle();
 		}
 		TextView txtCurrentlyPlaying = (TextView) findViewById(R.id.txtCurrentlyPlaying);
 		txtCurrentlyPlaying.setText(txt);
@@ -90,17 +90,17 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 	public void showNowPlayingDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle("Play Song");
-		alertDialog.setMessage("Playing " + this.mediaPlayer.getSong().getTitle());
+		alertDialog.setMessage("Playing " + app.mediaPlayer.getSong().getTitle());
 		alertDialog.show();
 	}
 
 	public void skipForward(View view) {
-		mediaPlayer.skipForward();
+		app.mediaPlayer.skipForward();
 		updateCurrentlyPlaying();
 	}
 
 	public void skipBackward(View view) {
-		mediaPlayer.skipBackward();
+		app.mediaPlayer.skipBackward();
 		updateCurrentlyPlaying();
 	}
 
@@ -127,10 +127,13 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 		}
 	}
 
-	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		mediaPlayer.setPosition(position);
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		app.mediaPlayer.setPosition(position);
+		view.setSelected(true);
 		play();
-		updateList();
+		view.setSelected( true );
+		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
+
 	}
 
 	@Override
@@ -153,8 +156,7 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 	}
 
 	protected void removeQueueItem(Song song) {
-		Log.v("REMOVE SONG", song.getTitle());
-		TitanMobile.user.queue.remove(song);
+		user.queue.remove(song);
 		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged(); 
 	}
 
@@ -162,28 +164,12 @@ public class MediaPlayerActivity extends Activity implements OnItemClickListener
 		return (Song) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(position);
 	}
 
-	private void updateList() {
-		// ListView songList = (ListView)
-		// findViewById(R.id.currentlyPlayingQueue);
-		// for (int i = 0; i < songList.getAdapter().getCount(); i++) {
-		// Log.v("test", i + " == " + mediaPlayer.getPosition());
-		// View v = songList.getAdapter().getView(i, null, songList);
-		// ImageView img = (ImageView) v.findViewById(R.id.isPlaying);
-		// if (i == mediaPlayer.getPosition()) {
-		// img.setImageResource(R.drawable.play);
-		// } else {
-		// img.setImageResource(R.drawable.blank);
-		// }
-		// }
-		// ImageView img = (ImageView) v.findViewById( R.id.isPlaying);
-		// img.setImageResource(R.drawable.play);
-	}
-
 	private void updateQueueList() {
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, TitanMobile.user.queue.getAll());
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.queue.getAll());
 		this.songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
+		songList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		registerForContextMenu(songList);
 	}
 

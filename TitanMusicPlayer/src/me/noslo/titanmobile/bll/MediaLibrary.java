@@ -2,16 +2,15 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 import me.noslo.titanmobile.dal.MusicLibraryDAO;
-import android.content.Context;
 
-public class MusicLibrary {
+public class MediaLibrary {
 
 	private User user;
 	private ArrayList<Artist> artists;
 	private ArrayList<Album> albums;
 	private ArrayList<Song> songs;
 	
-	MusicLibrary(User user) {
+	MediaLibrary(User user) {
 		this.user = user;
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();

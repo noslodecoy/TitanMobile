@@ -1,11 +1,10 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.TitanMobile;
+import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import com.example.titanmusicplayer.R;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -13,10 +12,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,13 +24,7 @@ import android.widget.TextView;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"fooo@example.com:hello", "bar@example.com:world" };
+public class LoginActivity extends TitanPlayerActivity {
 
 	/**
 	 * The default email to populate the email field with.
@@ -59,46 +52,54 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		MusicLibraryDAO.context = this;
+
 		setContentView(R.layout.activity_login);
 
-		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-		mPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
+		SharedPreferences settings = getSharedPreferences(TitanPlayerApplication.SHARED_PREFS, 0);
+
+		mEmail = settings.getString("username", null);
+		mPassword = settings.getString("password", null);
+
+		// mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		// mPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
 
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
-						return false;
-					}
-				});
+		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+				if (id == R.id.login || id == EditorInfo.IME_NULL) {
+					attemptLogin();
+					return true;
+				}
+				return false;
+			}
+		});
 		mPasswordView.setText(mPassword);
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		findViewById(R.id.sign_in_button).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						attemptLogin();
-					}
-				});
+		findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				attemptLogin();
+			}
+		});
 
 		if (mEmail != null && mPassword != null) {
-			Log.v("email", mEmail);
-			Log.v("email", mPassword);
-			attemptLogin();
+			this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			mLoginStatusView.setVisibility(View.VISIBLE);
+			mLoginFormView.setVisibility(View.GONE);
+
+			mAuthTask = new UserLoginTask();
+			mAuthTask.execute((Void) null);
 		}
 
 	}
@@ -176,30 +177,23 @@ public class LoginActivity extends Activity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
-					android.R.integer.config_shortAnimTime);
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
-			mLoginStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
+			mLoginStatusView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
 
 			mLoginFormView.setVisibility(View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
+			mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -224,46 +218,31 @@ public class LoginActivity extends Activity {
 				return false;
 			}
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
+			
+			return app.login(mEmail, mPassword);
 
-			// TODO: register the new account here.
-			return false;
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
-			showProgress(false);
 
 			if (success) {
 				finish();
-				TitanMobile.login(mEmail, "");
 
-				SharedPreferences settings = getApplicationContext()
-						.getSharedPreferences(TitanMobileActivity.SHARED_PREFS, 0); // 0
-																				// -
-																				// for
-																				// private
-																				// mode
+				SharedPreferences settings = getApplicationContext().getSharedPreferences(TitanPlayerApplication.SHARED_PREFS, 0);
 				Editor editor = settings.edit();
 				editor.putString("username", mEmail); // Storing string
 				editor.putString("password", mPassword); // Storing string
 				editor.commit();
 
-				Intent intent = new Intent(getApplicationContext(),
-						MediaPlayerActivity.class);
+				Intent intent = new Intent(getApplicationContext(), MediaPlayerActivity.class);
 				startActivity(intent);
 
 			} else {
+				showProgress(false);
 				mPassword = null;
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.setError(getString(R.string.error_incorrect_credentials));
 				mPasswordView.requestFocus();
 			}
 		}

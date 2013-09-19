@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.util.Log;
-
 public class User {
 
-	public MusicLibrary library;
+	public MediaLibrary library;
 	private String username;
 	public SongList queue;
 
 	public User() {
-		library = new MusicLibrary(this);
+		library = new MediaLibrary(this);
 		this.library.sync();
 		queue = new SongList();
 		getStoredQueue();

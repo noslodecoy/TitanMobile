@@ -1,20 +1,21 @@
 package me.noslo.titanmobile;
 
+import java.util.ArrayList;
+
 import me.noslo.titanmobile.bll.Artist;
-import me.noslo.titanmobile.bll.ArtistListAdapter;
-import me.noslo.titanmobile.bll.TitanMobile;
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseArtistsActivity extends Activity implements OnItemClickListener {
+public class BrowseArtistsActivity extends TitanPlayerActivity implements OnItemClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class BrowseArtistsActivity extends Activity implements OnItemClickListen
 	}
 
 	private void updateQueueList() {
-		ArtistListAdapter adapter = new ArtistListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, TitanMobile.user.library.getArtists());
+		ArtistListAdapter adapter = new ArtistListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getArtists());
 		ListView songList = (ListView) findViewById(R.id.browseArtistsListView);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
@@ -51,4 +52,14 @@ public class BrowseArtistsActivity extends Activity implements OnItemClickListen
 		return (Artist) ((ListView) findViewById(R.id.browseArtistsListView)).getAdapter().getItem(position);
 	}
 
+	public class ArtistListAdapter extends ArrayAdapter<Artist> {
+
+		ArrayList<Artist> artists;
+
+		public ArtistListAdapter(Context context, int layoutResId,
+				int textViewResourceId, ArrayList<Artist> artists) {
+			super(context, layoutResId, textViewResourceId, artists);
+		}
+
+	}
 }

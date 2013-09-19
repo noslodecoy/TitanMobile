@@ -1,27 +1,23 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.Album;
-import me.noslo.titanmobile.bll.AlbumListAdapter;
-import me.noslo.titanmobile.bll.Artist;
-import me.noslo.titanmobile.bll.TitanMobile;
-import me.noslo.titanmobile.bll.Song;
+import java.util.ArrayList;
 
+import me.noslo.titanmobile.bll.Album;
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseAlbumsActivity extends Activity implements OnItemClickListener {
+public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemClickListener {
 
 	public static final String EXTRA_ARTIST = "me.noslo.titanmobile.extra.ARTIST";
 
@@ -39,22 +35,21 @@ public class BrowseAlbumsActivity extends Activity implements OnItemClickListene
 		this.updateQueueList();
 	}
 
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		// Respond to the action bar's Up/Home button
-//		case android.R.id.home:
-//			Log.v("PRESSED OPTIONS ITEM", "HOOORRRAYAY: "+selectedArtistId);
-//			if (selectedArtistId > 0) {
-//				Intent intent = new Intent(this, BrowseArtistsActivity.class);
-//				startActivity(intent);
-//			} else {
-//				NavUtils.navigateUpFromSameTask(this);
-//			}
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// // Respond to the action bar's Up/Home button
+	// case android.R.id.home:
+	// if (selectedArtistId > 0) {
+	// Intent intent = new Intent(this, BrowseArtistsActivity.class);
+	// startActivity(intent);
+	// } else {
+	// NavUtils.navigateUpFromSameTask(this);
+	// }
+	// return true;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,7 +60,7 @@ public class BrowseAlbumsActivity extends Activity implements OnItemClickListene
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseAlbumsListView);
-		AlbumListAdapter adapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, TitanMobile.user.library.getAlbums(selectedArtistId));
+		AlbumListAdapter adapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getAlbums(selectedArtistId));
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}
@@ -81,7 +76,26 @@ public class BrowseAlbumsActivity extends Activity implements OnItemClickListene
 	protected Album getListItemAlbum(int position) {
 		return (Album) ((ListView) findViewById(R.id.browseAlbumsListView)).getAdapter().getItem(position);
 	}
-	
-	
+
+	public class AlbumListAdapter extends ArrayAdapter<Album> {
+
+		private ArrayList<Album> albums;
+
+		public AlbumListAdapter(Context context, int layoutResId, int textViewResourceId, ArrayList<Album> albums) {
+			super(context, layoutResId, textViewResourceId, albums);
+			this.albums = albums;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view = super.getView(position, convertView, parent);
+			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+			Album album = albums.get(position);
+			text1.setText(album.toString());
+			text2.setText(album.getArtist().toString());
+			return view;
+		}
+	}
 
 }

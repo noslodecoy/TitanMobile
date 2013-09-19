@@ -7,6 +7,14 @@ public class MediaPlayer {
 	private boolean isPlaying;
 	private long startTime;
 
+	public MediaPlayer() {
+		this.queue = new SongList();
+		playlistIndex = 0;
+		isPlaying = false;
+		startTime = 0;
+		getThread();
+	}
+
 	public MediaPlayer(SongList queue) {
 		this.queue = queue;
 		playlistIndex = 0;
@@ -37,7 +45,11 @@ public class MediaPlayer {
 	}
 
 	public void play() {
-		isPlaying = true;
+		if ( queue.size() > 0 ) {
+			isPlaying = true;
+			return;
+		}
+		stop();
 	}
 
 	public void stop() {

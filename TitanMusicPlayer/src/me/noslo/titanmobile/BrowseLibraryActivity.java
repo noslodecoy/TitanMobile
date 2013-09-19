@@ -1,16 +1,9 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.MediaPlayer;
-import me.noslo.titanmobile.bll.TitanMobile;
 import me.noslo.titanmobile.bll.Song;
-import me.noslo.titanmobile.bll.SongListAdapter;
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +13,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class BrowseLibraryActivity extends Activity {
+public class BrowseLibraryActivity extends TitanPlayerActivity {
 	public static final String EXTRA_ALBUM = "me.noslo.titanmobile.extra.ALBUM";
 
 	private int selectedAlbumId;
@@ -42,7 +35,6 @@ public class BrowseLibraryActivity extends Activity {
 //		switch (item.getItemId()) {
 //		// Respond to the action bar's Up/Home button
 //		case android.R.id.home:
-//			Log.v("PRESSED OPTIONS ITEM", "HOOORRRAYAY: " + selectedAlbumId);
 //			if (selectedAlbumId > 0) {
 //				Intent intent = new Intent(this, BrowseAlbumsActivity.class);
 //				startActivity(intent);
@@ -74,7 +66,7 @@ public class BrowseLibraryActivity extends Activity {
 	}
 	
 	protected void addQueueItem( Song song ) {
-		TitanMobile.mediaPlayer.getQueue().add( song );
+		app.mediaPlayer.getQueue().add( song );
 	}
 	
 	protected Song getListItemSong( int position ) {
@@ -90,7 +82,7 @@ public class BrowseLibraryActivity extends Activity {
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, TitanMobile.user.library.getSongs(selectedAlbumId));
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.library.getSongs(selectedAlbumId));
 		songList.setAdapter(adapter);
 		registerForContextMenu(songList);
 	}

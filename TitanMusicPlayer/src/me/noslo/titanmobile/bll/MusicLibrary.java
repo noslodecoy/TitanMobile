@@ -21,6 +21,11 @@ public class MusicLibrary {
 	public User getUser() {
 		return this.user;
 	}
+	
+	@Override
+	public String toString() {
+		return "MusicLibrary";
+	}
 
 	public void sync() {
 		this.artists = new ArrayList<Artist>();

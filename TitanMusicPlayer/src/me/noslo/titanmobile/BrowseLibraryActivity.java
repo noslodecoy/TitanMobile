@@ -37,22 +37,22 @@ public class BrowseLibraryActivity extends Activity {
 		this.updateQueueList();
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
-		case android.R.id.home:
-			Log.v("PRESSED OPTIONS ITEM", "HOOORRRAYAY: " + selectedAlbumId);
-			if (selectedAlbumId > 0) {
-				Intent intent = new Intent(this, BrowseAlbumsActivity.class);
-				startActivity(intent);
-			} else {
-				NavUtils.navigateUpFromSameTask(this);
-			}
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		// Respond to the action bar's Up/Home button
+//		case android.R.id.home:
+//			Log.v("PRESSED OPTIONS ITEM", "HOOORRRAYAY: " + selectedAlbumId);
+//			if (selectedAlbumId > 0) {
+//				Intent intent = new Intent(this, BrowseAlbumsActivity.class);
+//				startActivity(intent);
+//			} else {
+//				NavUtils.navigateUpFromSameTask(this);
+//			}
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {

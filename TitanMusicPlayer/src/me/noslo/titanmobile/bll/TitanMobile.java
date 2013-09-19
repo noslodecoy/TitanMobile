@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.util.Log;
+
 public class TitanMobile {
 	static public User user;
 	static public String sessionKey;
@@ -20,16 +22,5 @@ public class TitanMobile {
 		TitanMobile.sessionKey = sessionKey;
 	}
 
-	public static List<Song> getStoredQueue() {
 
-		ArrayList<Song> queue = new ArrayList<Song>();
-		Random randomGenerator = new Random();
-		for (int i = 0; i < 8; i++) {
-//			int songCount = TitanMobile.user.library.getSongs().size();
-//			int index = randomGenerator.nextInt( songCount );
-//			queue.add(TitanMobile.user.library.getSongs().get(index));
-		}
-
-		return queue;
-	}
 }

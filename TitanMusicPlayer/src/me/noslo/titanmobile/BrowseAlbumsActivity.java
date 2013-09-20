@@ -35,21 +35,6 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 		this.updateQueueList();
 	}
 
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// // Respond to the action bar's Up/Home button
-	// case android.R.id.home:
-	// if (selectedArtistId > 0) {
-	// Intent intent = new Intent(this, BrowseArtistsActivity.class);
-	// startActivity(intent);
-	// } else {
-	// NavUtils.navigateUpFromSameTask(this);
-	// }
-	// return true;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +45,7 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseAlbumsListView);
-		AlbumListAdapter adapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getAlbums(selectedArtistId));
+		AlbumListAdapter adapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getArtist(selectedArtistId).getAlbums());
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}

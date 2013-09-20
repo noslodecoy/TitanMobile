@@ -30,7 +30,6 @@ public class MediaLibrary {
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();
 		this.songs = new ArrayList<Song>();
-
 		MusicLibraryDAO.fetchArrayList(user);
 	}
 
@@ -42,38 +41,30 @@ public class MediaLibrary {
 		return this.songs;
 	}
 	
-	public ArrayList<Song> getSongs( int albumId ) {
-		if ( albumId == 0 ) {
-			return this.songs;
-		}
-		ArrayList<Song> songs = new ArrayList<Song>();
-		for ( Song song : this.songs ) {
-			if ( albumId == song.getAlbum().getId() ) {
-				songs.add( song );
-			}
-		}
-		return songs;
-	}
-
 	public ArrayList<Album> getAlbums() {
 		return this.albums;
-	}
-	
-	public ArrayList<Album> getAlbums( int artistId ) {
-		if ( artistId == 0 ) {
-			return this.albums;
-		}
-		ArrayList<Album> albums = new ArrayList<Album>();
-		for ( Album album : this.albums ) {
-			if ( artistId == album.getArtist().getId() ) {
-				albums.add( album );
-			}
-		}
-		return albums;
 	}
 
 	public ArrayList<Artist> getArtists() {
 		return this.artists;
+	}
+	
+	public Album getAlbum( int albumId ) {
+		for (Album album : this.albums ) {
+			if ( album.getId() == albumId ) {
+				return album;
+			}
+		}
+		return new Album();
+	}
+	
+	public Artist getArtist( int artistId ) {
+		for (Artist artist : this.artists ) {
+			if ( artist.getId() == artistId ) {
+				return artist;
+			}
+		}
+		return new Artist();
 	}
 
 	public Artist addArtist(String artistString) {

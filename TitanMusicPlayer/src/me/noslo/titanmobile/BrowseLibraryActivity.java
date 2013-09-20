@@ -82,7 +82,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 
 	private void updateQueueList() {
 		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.library.getSongs(selectedAlbumId));
+		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.library.getAlbum(selectedAlbumId).getSongs());
 		songList.setAdapter(adapter);
 		registerForContextMenu(songList);
 	}

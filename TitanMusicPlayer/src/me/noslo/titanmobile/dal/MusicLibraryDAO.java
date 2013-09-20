@@ -2,11 +2,11 @@ package me.noslo.titanmobile.dal;
 
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.Song;
 import me.noslo.titanmobile.bll.User;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-
 import com.example.titanmusicplayer.R;
 
 public class MusicLibraryDAO {
@@ -29,7 +29,9 @@ public class MusicLibraryDAO {
 
 			Artist artist = user.library.addArtist(artistName);
 			Album album = user.library.addAlbum(artist, albumName);
-			user.library.addSong(i, album, trackNumber, title);
+			Song song = user.library.addSong(i, album, trackNumber, title);
+			artist.addAlbum( album );
+			album.add( song );
 		}
 
 		artistsTypedArray.recycle();

@@ -1,9 +1,7 @@
 package me.noslo.titanmobile;
 
 import me.noslo.titanmobile.bll.Song;
-import me.noslo.titanmobile.dal.MusicLibraryDAO;
 import com.example.titanmusicplayer.R;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -129,11 +127,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		app.mediaPlayer.setPosition(position);
-		view.setSelected(true);
 		play();
-		view.setSelected( true );
-		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
-
 	}
 
 	@Override

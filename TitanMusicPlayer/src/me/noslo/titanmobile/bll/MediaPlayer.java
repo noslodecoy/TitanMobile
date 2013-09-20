@@ -52,6 +52,10 @@ public class MediaPlayer {
 		stop();
 	}
 
+	public long getStartTime() {
+		return startTime;
+	}
+	
 	public void stop() {
 		startTime = 0;
 		isPlaying = false;

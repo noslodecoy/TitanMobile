@@ -10,6 +10,12 @@ public class Album extends SongList {
 		this.artist = artist;
 		this.setId( ++uniqueId );
 	}
+	
+	public Album() {
+		super();
+		this.artist = new Artist();
+		this.setId( ++uniqueId );
+	}
 
 	public Artist getArtist() {
 		return this.artist;

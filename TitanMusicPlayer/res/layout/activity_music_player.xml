@@ -27,8 +27,7 @@
         android:layout_above="@+id/musicControls"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray" >
+        android:choiceMode="singleChoice" >
     </ListView>
 
 </RelativeLayout>

@@ -1,8 +1,12 @@
 package me.noslo.titanmobile;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.Song;
+
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -34,7 +38,15 @@ public class BrowseArtistsActivity extends TitanPlayerActivity implements OnItem
 	}
 
 	private void updateQueueList() {
-		ArtistListAdapter adapter = new ArtistListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getArtists());
+		ArrayList<Artist> artists = user.library.getArtists();
+		Collections.sort(artists, new Comparator<Artist>() {
+			public int compare(Artist artist1, Artist artist2) {
+				return artist1.toString().compareToIgnoreCase(
+						artist2.toString());
+			}
+		});
+		
+		ArtistListAdapter adapter = new ArtistListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, artists);
 		ListView songList = (ListView) findViewById(R.id.browseArtistsListView);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);

@@ -1,8 +1,13 @@
 package me.noslo.titanmobile;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import me.noslo.titanmobile.bll.Album;
+import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.Song;
+
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -17,7 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemClickListener {
+public class BrowseAlbumsActivity extends TitanPlayerActivity implements
+		OnItemClickListener {
 
 	public static final String EXTRA_ARTIST = "me.noslo.titanmobile.extra.ARTIST";
 
@@ -35,7 +41,6 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 		this.updateQueueList();
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -44,8 +49,20 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 	}
 
 	private void updateQueueList() {
+
+		ArrayList<Album> albums = (selectedArtistId > 0) ? user.library
+				.getArtist(selectedArtistId).getAlbums() : user.library
+				.getAlbums();
+		Collections.sort(albums, new Comparator<Album>() {
+			public int compare(Album album1, Album album2) {
+				return album1.toString().compareToIgnoreCase(
+						album2.toString());
+			}
+		});
+
 		ListView songList = (ListView) findViewById(R.id.browseAlbumsListView);
-		AlbumListAdapter adapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, user.library.getArtist(selectedArtistId).getAlbums());
+		AlbumListAdapter adapter = new AlbumListAdapter(this,
+				android.R.layout.simple_list_item_2, android.R.id.text1, albums);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);
 	}
@@ -59,14 +76,16 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 	}
 
 	protected Album getListItemAlbum(int position) {
-		return (Album) ((ListView) findViewById(R.id.browseAlbumsListView)).getAdapter().getItem(position);
+		return (Album) ((ListView) findViewById(R.id.browseAlbumsListView))
+				.getAdapter().getItem(position);
 	}
 
 	public class AlbumListAdapter extends ArrayAdapter<Album> {
 
 		private ArrayList<Album> albums;
 
-		public AlbumListAdapter(Context context, int layoutResId, int textViewResourceId, ArrayList<Album> albums) {
+		public AlbumListAdapter(Context context, int layoutResId,
+				int textViewResourceId, ArrayList<Album> albums) {
 			super(context, layoutResId, textViewResourceId, albums);
 			this.albums = albums;
 		}

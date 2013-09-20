@@ -5,16 +5,16 @@ public class Album extends SongList {
 	private Artist artist;
 	private static int uniqueId = 0;
 
-	public Album(Artist artist, String label) {
-		super(label);
+	public Album(Artist artist, String name) {
+		super(name);
 		this.artist = artist;
-		this.setId( ++uniqueId );
+		this.setId(++uniqueId);
 	}
-	
+
 	public Album() {
 		super();
 		this.artist = new Artist();
-		this.setId( ++uniqueId );
+		this.setId(++uniqueId);
 	}
 
 	public Artist getArtist() {
@@ -22,8 +22,16 @@ public class Album extends SongList {
 	}
 
 	@Override
+	public void setName(String name) {
+		if (name == null || name == "") {
+			name = "Untitled";
+		}
+		super.setName(name);
+	}
+
+	@Override
 	public boolean equals(Object object) {
-		return (object != null && object instanceof Album && (this.toString() == object
-				.toString()));
+		return (object != null && object instanceof Album && (this.toString()
+				.equals(object.toString())));
 	}
 }

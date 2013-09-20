@@ -1,5 +1,9 @@
 package me.noslo.titanmobile;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import me.noslo.titanmobile.bll.Song;
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
@@ -30,24 +34,10 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		this.updateQueueList();
 	}
 
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		// Respond to the action bar's Up/Home button
-//		case android.R.id.home:
-//			if (selectedAlbumId > 0) {
-//				Intent intent = new Intent(this, BrowseAlbumsActivity.class);
-//				startActivity(intent);
-//			} else {
-//				NavUtils.navigateUpFromSameTask(this);
-//			}
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.song_library_item, menu);
@@ -55,7 +45,8 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.add_queue_item:
 			addQueueItem(getListItemSong(info.position));
@@ -64,13 +55,14 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-	
-	protected void addQueueItem( Song song ) {
-		app.mediaPlayer.getQueue().add( song );
+
+	protected void addQueueItem(Song song) {
+		app.mediaPlayer.getQueue().add(song);
 	}
-	
-	protected Song getListItemSong( int position ) {
-	    return (Song)((ListView) findViewById(R.id.browseLibraryListView)).getAdapter().getItem(position);
+
+	protected Song getListItemSong(int position) {
+		return (Song) ((ListView) findViewById(R.id.browseLibraryListView))
+				.getAdapter().getItem(position);
 	}
 
 	@Override
@@ -81,8 +73,33 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 	}
 
 	private void updateQueueList() {
+		ArrayList<Song> songs = (selectedAlbumId > 0) ? user.library.getAlbum(
+				selectedAlbumId).getSongs() : user.library.getSongs();
+
+		if (selectedAlbumId > 0) {
+			Collections.sort(songs, new Comparator<Song>() {
+				public int compare(Song song1, Song song2) {
+					if ( song1.getTrackNumber() > song2.getTrackNumber()) {
+						return 1;
+					}
+					else if ( song1.getTrackNumber() < song2.getTrackNumber() ) {
+						return -1;
+					}
+					return 0;
+				}
+			});
+		} else {
+			Collections.sort(songs, new Comparator<Song>() {
+				public int compare(Song song1, Song song2) {
+					return song1.getTitle().compareToIgnoreCase(
+							song2.getTitle());
+				}
+			});
+		}
+
 		ListView songList = (ListView) findViewById(R.id.browseLibraryListView);
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.library.getAlbum(selectedAlbumId).getSongs());
+		SongListAdapter adapter = new SongListAdapter(this,
+				R.layout.song_list_item, songs);
 		songList.setAdapter(adapter);
 		registerForContextMenu(songList);
 	}

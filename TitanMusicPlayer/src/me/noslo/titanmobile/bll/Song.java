@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Comparator;
 import java.util.Locale;
 
+import android.net.Uri;
+
 public class Song {
 
 	private boolean isEmpty;
@@ -14,27 +16,34 @@ public class Song {
 	private Album album;
 	private int track;
 	private int songLength;
+	private String filename;
 
 	public Song() {
 		this.isEmpty = true;
 	}
 
-	public Song(File inFile) {
+	public Song(int id, Album album, int track, String title, String file) {
+		this.id = id;
+		this.isEmpty = false;
+		this.album = album;
+		this.track = track;
+		this.setTitle(title);
+		this.filename = file;
 	}
-
+	
 	public Song(int id, Album album, int track, String title) {
 		this.id = id;
 		this.isEmpty = false;
 		this.album = album;
 		this.track = track;
-		this.title = title;
+		this.setTitle(title);
 	}
-	
+
 	public Song(Album album, int track, String title) {
 		this.isEmpty = false;
 		this.album = album;
 		this.track = track;
-		this.title = title;
+		this.setTitle(title);
 	}
 
 	public void setId(int id) {
@@ -70,6 +79,9 @@ public class Song {
 	}
 
 	public void setTitle(String title) {
+		if (title == null || title == "") {
+			title = "Untitled";
+		}
 		this.title = title;
 	}
 
@@ -141,5 +153,10 @@ public class Song {
 			return songName1.compareTo(songName2);
 		}
 	};
+
+	public Uri getFileName() {
+		// TODO Auto-generated method stub
+		return Uri.parse(this.filename);
+	}
 
 }

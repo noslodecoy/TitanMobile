@@ -2,19 +2,22 @@ package me.noslo.titanmobile.bll;
 
 import java.util.*;
 
+import android.util.Log;
+
 public class SongList {
 
 	ArrayList<Song> songs;
-	private String label;
+	private String name;
 	private int id;
 
 	public SongList() {
+		setName("");
 		this.songs = new ArrayList<Song>();
 	}
 
-	public SongList(String label) {
+	public SongList(String name) {
+		setName(name);
 		this.songs = new ArrayList<Song>();
-		this.label = label;
 	}
 
 	public String getName() {
@@ -23,11 +26,11 @@ public class SongList {
 
 	@Override
 	public String toString() {
-		return this.label;
+		return name;
 	}
 
-	public void setName(String label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setId(int id) {
@@ -35,18 +38,18 @@ public class SongList {
 	}
 
 	public int getId() {
-		return this.id;
+		return id;
 	}
 
 	public ArrayList<Song> getSongs() {
-		return (ArrayList<Song>) this.songs;
+		return (ArrayList<Song>) songs;
 	}
 
 	public void empty() {
 	}
 
 	public Song get(int i) {
-		return this.songs.get(i);
+		return songs.get(i);
 	}
 
 	public ArrayList<Song> getAll() {

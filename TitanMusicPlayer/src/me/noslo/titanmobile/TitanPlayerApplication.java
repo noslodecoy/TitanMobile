@@ -20,7 +20,7 @@ public class TitanPlayerApplication extends Application {
 		if (MusicLibraryDAO.login(username, password)) {
 			user = new User();
 			user.setUserName(username);
-			mediaPlayer = new MediaPlayer(user.queue);
+			mediaPlayer = new MediaPlayer(this, user.queue);
 			return true;
 		}
 		return false;

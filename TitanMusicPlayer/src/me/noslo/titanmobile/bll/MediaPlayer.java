@@ -1,13 +1,21 @@
 package me.noslo.titanmobile.bll;
 
+import java.io.IOException;
+
+import android.content.Context;
+
 public class MediaPlayer {
 
 	private SongList queue;
 	private int playlistIndex;
 	private boolean isPlaying;
 	private long startTime;
+	private Context context;
+	
+	private android.media.MediaPlayer mPlayer;
 
-	public MediaPlayer() {
+	public MediaPlayer(Context context) {
+		this.context = context;
 		this.queue = new SongList();
 		playlistIndex = 0;
 		isPlaying = false;
@@ -15,7 +23,8 @@ public class MediaPlayer {
 		getThread();
 	}
 
-	public MediaPlayer(SongList queue) {
+	public MediaPlayer(Context context, SongList queue) {
+		this.context = context;
 		this.queue = queue;
 		playlistIndex = 0;
 		isPlaying = false;
@@ -45,8 +54,27 @@ public class MediaPlayer {
 	}
 
 	public void play() {
-		if ( queue.size() > 0 ) {
+		if (queue.size() > 0) {
 			isPlaying = true;
+			
+			if (mPlayer != null ) {
+				mPlayer.stop();
+			}
+
+			mPlayer = android.media.MediaPlayer
+						.create(context, getCurrentSong().getFileName());
+			try {
+				mPlayer.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			mPlayer.start();
+
 			return;
 		}
 		stop();
@@ -55,8 +83,11 @@ public class MediaPlayer {
 	public long getStartTime() {
 		return startTime;
 	}
-	
+
 	public void stop() {
+		if ( isPlaying ) {
+			mPlayer.stop();
+		}
 		startTime = 0;
 		isPlaying = false;
 	}

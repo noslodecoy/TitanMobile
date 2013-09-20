@@ -2,6 +2,7 @@ package me.noslo.titanmobile.dal;
 
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.MediaScanner;
 import me.noslo.titanmobile.bll.Song;
 import me.noslo.titanmobile.bll.User;
 import android.content.Context;
@@ -15,29 +16,32 @@ public class MusicLibraryDAO {
 
 	static public void fetchArrayList(User user) {
 
-		Resources resources = context.getResources();
-		TypedArray artistsTypedArray = resources.obtainTypedArray(R.array.song_artists);
-		TypedArray albumsTypedArray = resources.obtainTypedArray(R.array.song_albums);
-		TypedArray tracksTypedArray = resources.obtainTypedArray(R.array.song_tracks);
-		TypedArray titlesTypedArray = resources.obtainTypedArray(R.array.song_titles);
+//		Resources resources = context.getResources();
+//		TypedArray artistsTypedArray = resources.obtainTypedArray(R.array.song_artists);
+//		TypedArray albumsTypedArray = resources.obtainTypedArray(R.array.song_albums);
+//		TypedArray tracksTypedArray = resources.obtainTypedArray(R.array.song_tracks);
+//		TypedArray titlesTypedArray = resources.obtainTypedArray(R.array.song_titles);
+//
+//		for (int i = 0; i < titlesTypedArray.length(); i++) {
+//			String artistName = artistsTypedArray.getString(i);
+//			String albumName = albumsTypedArray.getString(i);
+//			int trackNumber = tracksTypedArray.getInt(i, 0);
+//			String title = titlesTypedArray.getString(i);
+//
+//			Artist artist = user.library.addArtist(artistName);
+//			Album album = user.library.addAlbum(artist, albumName);
+//			Song song = user.library.addSong(i, album, trackNumber, title, "");
+//			artist.addAlbum( album );
+//			album.add( song );
+//		}
+		
+		MediaScanner scanner = new MediaScanner();
+		scanner.scan(user);
 
-		for (int i = 0; i < titlesTypedArray.length(); i++) {
-			String artistName = artistsTypedArray.getString(i);
-			String albumName = albumsTypedArray.getString(i);
-			int trackNumber = tracksTypedArray.getInt(i, 0);
-			String title = titlesTypedArray.getString(i);
-
-			Artist artist = user.library.addArtist(artistName);
-			Album album = user.library.addAlbum(artist, albumName);
-			Song song = user.library.addSong(i, album, trackNumber, title);
-			artist.addAlbum( album );
-			album.add( song );
-		}
-
-		artistsTypedArray.recycle();
-		albumsTypedArray.recycle();
-		tracksTypedArray.recycle();
-		titlesTypedArray.recycle();
+//		artistsTypedArray.recycle();
+//		albumsTypedArray.recycle();
+//		tracksTypedArray.recycle();
+//		titlesTypedArray.recycle();
 	}
 
 	public static boolean login(String username, String password) {

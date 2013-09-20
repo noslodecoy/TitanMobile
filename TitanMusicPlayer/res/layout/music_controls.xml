@@ -19,7 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <SeekBar
-        android:id="@+id/seekBar1"
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,7 +29,7 @@
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBar1"
+        android:layout_below="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:background="@null"
         android:contentDescription="@string/play"
@@ -44,7 +44,7 @@
         android:id="@+id/btnSkipBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBar1"
+        android:layout_below="@+id/progressBar"
         android:layout_toLeftOf="@+id/btnPlay"
         android:background="@null"
         android:contentDescription="@string/previous"

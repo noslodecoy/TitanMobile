@@ -10,6 +10,8 @@ public class MediaLibrary {
 	private ArrayList<Album> albums;
 	private ArrayList<Song> songs;
 	
+
+	
 	MediaLibrary(User user) {
 		this.user = user;
 		this.artists = new ArrayList<Artist>();
@@ -30,7 +32,7 @@ public class MediaLibrary {
 		this.artists = new ArrayList<Artist>();
 		this.albums = new ArrayList<Album>();
 		this.songs = new ArrayList<Song>();
-		MusicLibraryDAO.fetchArrayList(user);
+		MusicLibraryDAO.fetchLibrary(user);
 	}
 
 	public void addSong(Song song) {
@@ -39,6 +41,15 @@ public class MediaLibrary {
 
 	public ArrayList<Song> getSongs() {
 		return this.songs;
+	}
+	
+	public Song getSong( int id ) {
+		for ( Song song : songs ) {
+			if ( id == song.getId() ) {
+				return song;
+			}
+		}
+		return null;
 	}
 	
 	public ArrayList<Album> getAlbums() {
@@ -89,6 +100,10 @@ public class MediaLibrary {
 		Song song = new Song(id, album, trackNumber, titleString, filename);
 		this.songs.add(song);
 		return song;
+	}
+
+	public void getQueue( User user ) {
+		MusicLibraryDAO.fetchQueue(user);
 	}
 
 }

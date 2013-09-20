@@ -16,7 +16,7 @@ public class Song {
 	private int track;
 	private int songLength;
 	private String filename;
-
+	
 	public Song() {
 		this.isEmpty = true;
 	}

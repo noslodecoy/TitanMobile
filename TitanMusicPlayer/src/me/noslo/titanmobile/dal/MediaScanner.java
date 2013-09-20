@@ -1,6 +1,11 @@
-package me.noslo.titanmobile.bll;
+package me.noslo.titanmobile.dal;
 
 import java.io.File;
+
+import me.noslo.titanmobile.bll.User;
+
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 
@@ -8,9 +13,11 @@ public class MediaScanner {
 	// SDCard Path
 	private User user;
 	private int id;
+	private SQLiteDatabase db;
 
 	// Constructor
-	public MediaScanner() {
+	public MediaScanner( SQLiteDatabase db ) {
+		this.db = db;
 	}
 
 	public void scan(User user) {
@@ -37,7 +44,6 @@ public class MediaScanner {
 
 	private void addFile(File file) {
 		try {
-
 			MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 			mmr.setDataSource(file.toString());
 			String artistName = mmr
@@ -49,12 +55,15 @@ public class MediaScanner {
 			int trackNumber = Integer
 					.parseInt(mmr
 							.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER));
-			Artist artist = user.library.addArtist(artistName);
-			Album album = user.library.addAlbum(artist, albumName);
-			Song song = user.library.addSong(++id, album, trackNumber, title,
-					file.toString());
-			artist.addAlbum(album);
-			album.add(song);
+			
+			ContentValues values = new ContentValues();
+			values.put(LibraryColumns.COLUMN_ARTIST, artistName);
+			values.put(LibraryColumns.COLUMN_ALBUM, albumName);
+			values.put(LibraryColumns.COLUMN_TRACK, trackNumber);
+			values.put(LibraryColumns.COLUMN_TITLE, title);
+			values.put(LibraryColumns.COLUMN_FILE_NAME, file.toString());
+
+			db.insertWithOnConflict(LibraryColumns.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 		} catch (Exception e) {
 
 		}

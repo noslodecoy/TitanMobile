@@ -19,10 +19,11 @@ import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.Intent;
 
-public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener {
+public class MediaPlayerActivity extends TitanPlayerActivity implements
+		OnItemClickListener {
 
 	private ListView songList;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 		updateQueueList();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -56,9 +57,9 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		app.mediaPlayer.pause();
 		updateCurrentlyPlaying();
 	}
-	
+
 	public void drawPlayBtn() {
-		if ( app.mediaPlayer.isPlaying() ) {
+		if (app.mediaPlayer.isPlaying()) {
 			ImageButton btn = (ImageButton) findViewById(R.id.btnPlay);
 			btn.setImageResource(R.drawable.pause);
 		} else {
@@ -66,7 +67,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 			btn.setImageResource(R.drawable.play);
 		}
 	}
-	
+
 	public void togglePlay(View view) {
 		if (app.mediaPlayer.isPlaying()) {
 			pause();
@@ -88,7 +89,8 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 	public void showNowPlayingDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle("Play Song");
-		alertDialog.setMessage("Playing " + app.mediaPlayer.getSong().getTitle());
+		alertDialog.setMessage("Playing "
+				+ app.mediaPlayer.getSong().getTitle());
 		alertDialog.show();
 	}
 
@@ -125,13 +127,15 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
 		app.mediaPlayer.setPosition(position);
 		play();
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.song_queue_item, menu);
@@ -139,7 +143,8 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.remove_queue_item:
 			removeQueueItem(getListItemSong(info.position));
@@ -151,15 +156,17 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 	protected void removeQueueItem(Song song) {
 		user.queue.remove(song);
-		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged(); 
+		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
 	}
 
 	protected Song getListItemSong(int position) {
-		return (Song) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(position);
+		return (Song) ((ListView) findViewById(R.id.currentlyPlayingQueue))
+				.getAdapter().getItem(position);
 	}
 
 	private void updateQueueList() {
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, user.queue.getAll());
+		SongListAdapter adapter = new SongListAdapter(this,
+				R.layout.song_list_item, user.queue.getAll());
 		this.songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 		songList.setAdapter(adapter);
 		songList.setOnItemClickListener(this);

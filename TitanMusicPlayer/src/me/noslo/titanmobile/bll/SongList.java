@@ -2,8 +2,6 @@ package me.noslo.titanmobile.bll;
 
 import java.util.*;
 
-import android.util.Log;
-
 public class SongList {
 
 	ArrayList<Song> songs;

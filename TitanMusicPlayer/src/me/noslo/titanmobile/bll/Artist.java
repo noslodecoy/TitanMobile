@@ -2,8 +2,6 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class Artist extends SongList {
 
 	private static int uniqueId = 0;
@@ -21,7 +19,8 @@ public class Artist extends SongList {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object != null && object instanceof Artist && this.toString().equals(object.toString()));
+		return (object != null && object instanceof Artist && this.toString()
+				.equals(object.toString()));
 	}
 
 	public void addAlbum(Album album) {

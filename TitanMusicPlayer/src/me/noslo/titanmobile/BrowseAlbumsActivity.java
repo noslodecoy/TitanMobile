@@ -3,11 +3,7 @@ package me.noslo.titanmobile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 import me.noslo.titanmobile.bll.Album;
-import me.noslo.titanmobile.bll.Artist;
-import me.noslo.titanmobile.bll.Song;
-
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -55,8 +51,7 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements
 				.getAlbums();
 		Collections.sort(albums, new Comparator<Album>() {
 			public int compare(Album album1, Album album2) {
-				return album1.toString().compareToIgnoreCase(
-						album2.toString());
+				return album1.toString().compareToIgnoreCase(album2.toString());
 			}
 		});
 

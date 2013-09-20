@@ -9,14 +9,14 @@ public class TitanPlayerApplication extends Application {
 
 	public User user;
 	public MediaPlayer mediaPlayer;
-	
+
 	public static final String SHARED_PREFS = "me.noslo.titanmobile.PREFS";
-	
+
 	public void onCreate() {
 		MusicLibraryDAO.context = this;
 	}
-	
-	public boolean login( String username, String password ) {
+
+	public boolean login(String username, String password) {
 		if (MusicLibraryDAO.login(username, password)) {
 			user = new User();
 			user.setUserName(username);
@@ -25,5 +25,5 @@ public class TitanPlayerApplication extends Application {
 		}
 		return false;
 	}
-	
+
 }

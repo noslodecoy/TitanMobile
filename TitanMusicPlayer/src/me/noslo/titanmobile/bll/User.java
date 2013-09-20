@@ -23,13 +23,13 @@ public class User {
 		Random randomGenerator = new Random();
 		for (int i = 0; i < 8; i++) {
 			int songCount = this.library.getSongs().size();
-			int index = randomGenerator.nextInt( songCount );
+			int index = randomGenerator.nextInt(songCount);
 			queue.add(this.library.getSongs().get(index));
 		}
 		this.queue.replaceAll(queue);
 		return queue;
 	}
-	
+
 	public String getUsername() {
 		return this.username;
 	}

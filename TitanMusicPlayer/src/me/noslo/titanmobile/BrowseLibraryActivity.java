@@ -3,7 +3,6 @@ package me.noslo.titanmobile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 import me.noslo.titanmobile.bll.Song;
 import com.example.titanmusicplayer.R;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 
 		this.updateQueueList();
 	}
-
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -79,10 +77,9 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		if (selectedAlbumId > 0) {
 			Collections.sort(songs, new Comparator<Song>() {
 				public int compare(Song song1, Song song2) {
-					if ( song1.getTrackNumber() > song2.getTrackNumber()) {
+					if (song1.getTrackNumber() > song2.getTrackNumber()) {
 						return 1;
-					}
-					else if ( song1.getTrackNumber() < song2.getTrackNumber() ) {
+					} else if (song1.getTrackNumber() < song2.getTrackNumber()) {
 						return -1;
 					}
 					return 0;

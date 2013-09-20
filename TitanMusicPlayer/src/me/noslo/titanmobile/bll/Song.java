@@ -1,6 +1,5 @@
 package me.noslo.titanmobile.bll;
 
-import java.io.File;
 import java.util.Comparator;
 import java.util.Locale;
 
@@ -30,7 +29,7 @@ public class Song {
 		this.setTitle(title);
 		this.filename = file;
 	}
-	
+
 	public Song(int id, Album album, int track, String title) {
 		this.id = id;
 		this.isEmpty = false;

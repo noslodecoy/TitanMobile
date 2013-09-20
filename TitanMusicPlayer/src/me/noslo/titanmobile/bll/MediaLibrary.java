@@ -1,8 +1,6 @@
 package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
-
-import android.util.Log;
 import me.noslo.titanmobile.dal.MusicLibraryDAO;
 
 public class MediaLibrary {
@@ -72,7 +70,6 @@ public class MediaLibrary {
 	public Artist addArtist(String artistString) {
 		Artist artist = new Artist(artistString);
 		if (!artists.contains(artist)) {
-			Log.d( "Artist Not Found", artistString );
 			this.artists.add(artist);
 			return artist;
 		}

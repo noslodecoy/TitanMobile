@@ -1,7 +1,6 @@
 package me.noslo.titanmobile.bll;
 
 import java.io.IOException;
-
 import android.content.Context;
 
 public class MediaPlayer {
@@ -11,7 +10,7 @@ public class MediaPlayer {
 	private boolean isPlaying;
 	private long startTime;
 	private Context context;
-	
+
 	private android.media.MediaPlayer mPlayer;
 
 	public MediaPlayer(Context context) {
@@ -56,13 +55,13 @@ public class MediaPlayer {
 	public void play() {
 		if (queue.size() > 0) {
 			isPlaying = true;
-			
-			if (mPlayer != null ) {
+
+			if (mPlayer != null) {
 				mPlayer.stop();
 			}
 
-			mPlayer = android.media.MediaPlayer
-						.create(context, getCurrentSong().getFileName());
+			mPlayer = android.media.MediaPlayer.create(context,
+					getCurrentSong().getFileName());
 			try {
 				mPlayer.prepare();
 			} catch (IllegalStateException e) {
@@ -85,7 +84,7 @@ public class MediaPlayer {
 	}
 
 	public void stop() {
-		if ( isPlaying ) {
+		if (isPlaying) {
 			mPlayer.stop();
 		}
 		startTime = 0;

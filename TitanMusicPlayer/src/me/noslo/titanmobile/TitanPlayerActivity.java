@@ -8,11 +8,11 @@ public class TitanPlayerActivity extends Activity {
 
 	public TitanPlayerApplication app;
 	public User user;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.app = (TitanPlayerApplication)getApplication();
+		this.app = (TitanPlayerApplication) getApplication();
 		this.user = app.user;
 	}
 }

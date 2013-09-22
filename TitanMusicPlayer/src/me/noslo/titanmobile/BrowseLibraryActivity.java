@@ -67,7 +67,8 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 	}
 
 	protected void addQueueItem(Song song) {
-		app.user.queue.add(song);
+		Log.d( "BrowseLibraryActivity", "Add Queue Item" );
+		app.user.queue.addNew(song);
 	}
 
 	protected Song getListItemSong(int position) {

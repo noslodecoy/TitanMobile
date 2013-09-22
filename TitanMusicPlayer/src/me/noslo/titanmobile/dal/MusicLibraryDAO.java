@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.titanmusicplayer.R;
 
@@ -112,7 +113,7 @@ public class MusicLibraryDAO {
 		user.queue.empty();
 		SQLiteDatabase db = MusicLibraryDAO.getDb();
 		String[] columns = new String[] { QueueColumns._ID, QueueColumns.COLUMN_SONG_ID, QueueColumns.COLUMN_WEIGHT };
-		Cursor cursor = db.query(LibraryColumns.TABLE_NAME, columns, null, null, null, null, null);
+		Cursor cursor = db.query(QueueColumns.TABLE_NAME, columns, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Song song = user.library.getSong(cursor.getInt(1));
@@ -121,16 +122,18 @@ public class MusicLibraryDAO {
 		}
 	}
 	
-	public static void removeQueueItem( int id ) {
-		
+	public static void removeQueueItem( Song song ) {
+		db = getDb();
+		db.delete(QueueColumns.TABLE_NAME, QueueColumns._ID+" = "+song.getId(), null );
 	}
 	
-	public static void addQueueItem( Song song ) {
+	public static long addQueueItem( Song song ) {
 		ContentValues values = new ContentValues();
 		values.put(QueueColumns.COLUMN_SONG_ID, song.getId());
 		values.put(QueueColumns.COLUMN_WEIGHT, 0);
 		db = getDb();
-		db.insert(LibraryColumns.TABLE_NAME, null, values);
+		return db.insert(QueueColumns.TABLE_NAME, null, values);
+		
 	}
 
 

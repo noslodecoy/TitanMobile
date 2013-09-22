@@ -18,14 +18,14 @@ public class MediaLibraryDatabaseHelper extends SQLiteOpenHelper {
                         + LibraryColumns.COLUMN_ALBUM + " TEXT,"
                         + LibraryColumns.COLUMN_TRACK + " INTEGER,"
                         + LibraryColumns.COLUMN_FILE_NAME + " TEXT UNIQUE"
-                        +");";
+                        + ");";
     
     private static final String QUEUE_TABLE_CREATE =
             "CREATE TABLE " + QueueColumns.TABLE_NAME + " ("
                     + QueueColumns._ID + " INTEGER PRIMARY KEY,"
                     + QueueColumns.COLUMN_SONG_ID + " INTEGER,"
                     + QueueColumns.COLUMN_WEIGHT + " INTEGER"
-                    +");";
+                    + ");";
 
     MediaLibraryDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

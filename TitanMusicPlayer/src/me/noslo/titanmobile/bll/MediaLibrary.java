@@ -15,7 +15,7 @@ import me.noslo.titanmobile.dal.MusicLibraryDAO;
 public class MediaLibrary {
 
 	public static final String ARTIST_COLUMN = MediaStore.Audio.Media.ARTIST;
-	
+
 	private User user;
 
 	MediaLibrary(User user) {
@@ -31,7 +31,9 @@ public class MediaLibrary {
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.ARTIST };
 		Cursor cursor = activity.getContentResolver().query(contentUri, proj,
-				MediaStore.Audio.Artists._ID+ "=?", new String[] {Integer.toString(artistId)}, MediaStore.Audio.Media.ARTIST);
+				MediaStore.Audio.Artists._ID + "=?",
+				new String[] { Integer.toString(artistId) },
+				MediaStore.Audio.Media.ARTIST);
 		cursor.moveToFirst();
 		return new Artist(cursor.getInt(0), cursor.getString(1));
 	}
@@ -41,7 +43,9 @@ public class MediaLibrary {
 		String[] proj = { MediaStore.Audio.Media._ID,
 				MediaStore.Audio.Media.ALBUM };
 		Cursor cursor = activity.getContentResolver().query(contentUri, proj,
-				MediaStore.Audio.Albums._ID+ "=?", new String[] {Integer.toString(albumId)}, MediaStore.Audio.Media.ALBUM);
+				MediaStore.Audio.Albums._ID + "=?",
+				new String[] { Integer.toString(albumId) },
+				MediaStore.Audio.Media.ALBUM);
 		cursor.moveToFirst();
 		return new Album(cursor.getInt(0), cursor.getString(1));
 	}
@@ -57,7 +61,7 @@ public class MediaLibrary {
 
 	public ArrayList<Artist> getArtists(Activity activity) {
 		ArrayList<Artist> artists = new ArrayList<Artist>();
-		Cursor cursor = getArtistsCursor( activity );
+		Cursor cursor = getArtistsCursor(activity);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Log.d("MediaLibrary",
@@ -69,14 +73,13 @@ public class MediaLibrary {
 		cursor.close();
 		return artists;
 	}
-	
-	public Cursor getArtistsCursor( Activity activity ) {
+
+	public Cursor getArtistsCursor(Activity activity) {
 		Uri contentUri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
-		String[] proj = { MediaStore.Audio.Media._ID,
-				ARTIST_COLUMN };
-		return activity.getContentResolver().query(contentUri, proj,
-				null, null, MediaStore.Audio.Media.ARTIST);
-		
+		String[] proj = { MediaStore.Audio.Media._ID, ARTIST_COLUMN };
+		return activity.getContentResolver().query(contentUri, proj, null,
+				null, MediaStore.Audio.Media.ARTIST);
+
 	}
 
 	public ArrayList<Album> getAlbums(Activity activity, int artistId) {
@@ -114,22 +117,51 @@ public class MediaLibrary {
 	public void getQueue(User user) {
 		MusicLibraryDAO.fetchQueue(user);
 	}
-	
-	 public static void addToPlaylist(Context context, int audioId, int playlistId) {
-		 	ContentResolver resolver = context.getContentResolver();
 
-	        String[] cols = new String[] {
-	                "count(*)"
-	        };
-	        Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId);
-	        Cursor cur = resolver.query(uri, cols, null, null, null);
-	        cur.moveToFirst();
-	        final int base = cur.getInt(0);
-	        cur.close();
-	        ContentValues values = new ContentValues();
-	        values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, Integer.valueOf(base + audioId));
-	        values.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId);
-	        resolver.insert(uri, values);
-	    }
+	public static void addToPlaylist(Context context, int playlistId,
+			int audioId) {
+		ContentResolver resolver = context.getContentResolver();
+
+		String[] cols = new String[] { "count(*)" };
+		Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external",
+				playlistId);
+		Cursor cur = resolver.query(uri, cols, null, null, null);
+		cur.moveToFirst();
+		final int base = cur.getInt(0);
+		cur.close();
+		ContentValues values = new ContentValues();
+		values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER,
+				Integer.valueOf(base + audioId));
+		values.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId);
+		resolver.insert(uri, values);
+	}
+
+	public static int createPlaylist(Context context, String name) {
+		ContentResolver resolver = context.getContentResolver();
+
+		int playlistId = -1;
+		ContentValues mInserts = new ContentValues();
+		mInserts.put(MediaStore.Audio.Playlists.NAME, name);
+		mInserts.put(MediaStore.Audio.Playlists.DATE_ADDED,
+				System.currentTimeMillis());
+		mInserts.put(MediaStore.Audio.Playlists.DATE_MODIFIED,
+				System.currentTimeMillis());
+		Uri uri = resolver.insert(
+				MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, mInserts);
+		if (uri != null) {
+			Cursor cursor = resolver.query(uri, PROJECTION_PLAYLIST, null,
+					null, null);
+			if (cursor != null) {
+				playlistId = cursor.getInt(cursor
+						.getColumnIndex(MediaStore.Audio.Playlists._ID));
+				cursor.close();
+			}
+		}
+		return playlistId;
+	}
+
+	public static final String[] PROJECTION_PLAYLIST = new String[] {
+			MediaStore.Audio.Playlists._ID, MediaStore.Audio.Playlists.NAME,
+			MediaStore.Audio.Playlists.DATA };
 
 }

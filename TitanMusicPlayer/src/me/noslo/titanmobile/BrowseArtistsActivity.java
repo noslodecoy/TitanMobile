@@ -1,23 +1,27 @@
 package me.noslo.titanmobile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import me.noslo.titanmobile.bll.Artist;
 import com.example.titanmusicplayer.R;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.app.ActionBar;
-import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.app.LoaderManager;
 
 public class BrowseArtistsActivity extends TitanPlayerActivity implements
-		OnItemClickListener {
+		OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+
+	private ListView list;
+	private SimpleCursorAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,54 +29,55 @@ public class BrowseArtistsActivity extends TitanPlayerActivity implements
 		setContentView(R.layout.activity_browse_artists);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		this.updateQueueList();
+
+		list = (ListView) findViewById(R.id.browseArtistsListView);
+		list.setOnItemClickListener(this);
+
+		this.fillList();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.browse_library, menu);
 		return true;
 	}
 
-	private void updateQueueList() {
-		ArrayList<Artist> artists = user.library.getArtists();
-		Collections.sort(artists, new Comparator<Artist>() {
-			public int compare(Artist artist1, Artist artist2) {
-				return artist1.toString().compareToIgnoreCase(
-						artist2.toString());
-			}
-		});
+	private void fillList() {
 
-		ArtistListAdapter adapter = new ArtistListAdapter(this,
-				android.R.layout.simple_list_item_2, android.R.id.text1,
-				artists);
-		ListView songList = (ListView) findViewById(R.id.browseArtistsListView);
-		songList.setAdapter(adapter);
-		songList.setOnItemClickListener(this);
+		String[] from = new String[] { MediaStore.Audio.Media.ARTIST };
+		int[] to = new int[] { android.R.id.text1 };
+
+		getLoaderManager().initLoader(0, null, this);
+		adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1,
+				null, from, to, 0);
+
+		list.setAdapter(adapter);
 	}
 
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		Artist artist = getListItemArtist(position);
-		Intent intent = new Intent(this, BrowseAlbumsActivity.class);
-		intent.putExtra(BrowseAlbumsActivity.EXTRA_ARTIST, artist.getId());
-		startActivity(intent);
-
+		 Intent intent = new Intent(this, BrowseAlbumsActivity.class);
+		 intent.putExtra(BrowseAlbumsActivity.EXTRA_ARTIST_ID, id);
+		 startActivity(intent);
 	}
 
-	protected Artist getListItemArtist(int position) {
-		return (Artist) ((ListView) findViewById(R.id.browseArtistsListView))
-				.getAdapter().getItem(position);
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+		Uri contentUri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+		String[] projection = { MediaStore.Audio.Media._ID,
+				MediaStore.Audio.Media.ARTIST };
+		CursorLoader cursorLoader = new CursorLoader(this, contentUri,
+				projection, null, null, MediaStore.Audio.Media.ARTIST_KEY);
+		return cursorLoader;
 	}
 
-	public class ArtistListAdapter extends ArrayAdapter<Artist> {
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+		adapter.swapCursor(arg1);
+	}
 
-		ArrayList<Artist> artists;
-
-		public ArtistListAdapter(Context context, int layoutResId,
-				int textViewResourceId, ArrayList<Artist> artists) {
-			super(context, layoutResId, textViewResourceId, artists);
-		}
-
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		adapter.swapCursor(null);
 	}
 }

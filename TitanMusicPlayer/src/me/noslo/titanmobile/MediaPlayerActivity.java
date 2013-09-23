@@ -1,9 +1,7 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.BrowseLibraryActivity.SyncLocalMediaTask;
 import me.noslo.titanmobile.bll.Song;
 import com.example.titanmusicplayer.R;
-
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -40,19 +38,19 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		progressBar = (SeekBar) findViewById(R.id.progressBar);
 		progressBar.setOnSeekBarChangeListener(this);
 		
-		songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
+//		songList = (ListView) findViewById(R.id.currentlyPlayingQueue);
 
 		
-		updateQueueList();
-		queueTask = new RetrieveQueueTask();
-		queueTask.execute((Void)null);
+//		updateQueueList();
+//		queueTask = new RetrieveQueueTask();
+//		queueTask.execute((Void)null);
 		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
+//		((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
 		drawPlayBtn();
 	}
 
@@ -105,7 +103,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		String txt = "";
 		if (app.mediaPlayer.isPlaying()) {
 			updateProgressBar();
-			txt = app.mediaPlayer.getSong().getTitle();
+			txt = app.mediaPlayer.getSong().getName();
 		}
 		TextView txtCurrentlyPlaying = (TextView) findViewById(R.id.txtCurrentlyPlaying);
 		txtCurrentlyPlaying.setText(txt);
@@ -114,7 +112,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 	public void showNowPlayingDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle("Play Song");
-		alertDialog.setMessage("Playing " + app.mediaPlayer.getSong().getTitle());
+		alertDialog.setMessage("Playing " + app.mediaPlayer.getSong().getName());
 		alertDialog.show();
 	}
 
@@ -145,6 +143,11 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		}
 		case R.id.action_browse_albums: {
 			Intent intent = new Intent(this, BrowseAlbumsActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		case R.id.action_settings: {
+			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
 			return true;
 		}

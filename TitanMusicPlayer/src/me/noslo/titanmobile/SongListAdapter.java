@@ -35,7 +35,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
 		TextView text1 = (TextView) row.findViewById(R.id.song_title);
 		TextView text2 = (TextView) row.findViewById(R.id.song_meta);
-		text1.setText(song.getTitle());
+		text1.setText(song.getName());
 		text2.setText(song.getArtistAlbum());
 
 		return row;

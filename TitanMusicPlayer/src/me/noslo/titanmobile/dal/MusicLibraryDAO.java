@@ -55,18 +55,18 @@ public class MusicLibraryDAO {
 	}
 
 	static public void fetchLibrary(User user) {
-		SQLiteDatabase db = getDb();
-		String[] columns = new String[] { LibraryColumns._ID, LibraryColumns.COLUMN_ARTIST, LibraryColumns.COLUMN_ALBUM, LibraryColumns.COLUMN_TRACK, LibraryColumns.COLUMN_TITLE, LibraryColumns.COLUMN_FILE_NAME };
-		Cursor cursor = db.query(LibraryColumns.TABLE_NAME, columns, null, null, null, null, null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Artist artist = user.library.addArtist(cursor.getString(1));
-			Album album = user.library.addAlbum(artist, cursor.getString(2));
-			Song song = user.library.addSong(cursor.getInt(0), album, cursor.getInt(3), cursor.getString(4), cursor.getString(5));
-			artist.addAlbum(album);
-			album.add(song);
-			cursor.moveToNext();
-		}
+//		SQLiteDatabase db = getDb();
+//		String[] columns = new String[] { LibraryColumns._ID, LibraryColumns.COLUMN_ARTIST, LibraryColumns.COLUMN_ALBUM, LibraryColumns.COLUMN_TRACK, LibraryColumns.COLUMN_TITLE, LibraryColumns.COLUMN_FILE_NAME };
+//		Cursor cursor = db.query(LibraryColumns.TABLE_NAME, columns, null, null, null, null, null);
+//		cursor.moveToFirst();
+//		while (!cursor.isAfterLast()) {
+//			Artist artist = user.library.addArtist(cursor.getString(1));
+//			Album album = user.library.addAlbum(artist, cursor.getString(2));
+//			Song song = user.library.addSong(cursor.getInt(0), album, cursor.getInt(3), cursor.getString(4), cursor.getString(5));
+//			artist.addAlbum(album);
+//			album.add(song);
+//			cursor.moveToNext();
+//		}
 		hasFetchedLibrary = true;
 	}
 

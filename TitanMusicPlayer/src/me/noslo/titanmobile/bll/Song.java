@@ -5,157 +5,81 @@ import java.util.Locale;
 
 import android.net.Uri;
 
-public class Song {
+public class Song implements MediaLibraryObject {
 
-	private boolean isEmpty;
-
-	// song info from database
 	private int id;
-	private String title;
-	private Album album;
-	private int track;
-	private int songLength;
-	private String filename;
-	
+	private String artistName;
+	private String albumName;
+	private int trackNumber;
+	private String name;
+	private String fileName;
+
 	public Song() {
-		this.isEmpty = true;
 	}
 
-	public Song(int id, Album album, int track, String title, String file) {
-		this.id = id;
-		this.isEmpty = false;
-		this.album = album;
-		this.track = track;
-		this.setTitle(title);
-		this.filename = file;
-	}
-
-	public Song(int id, Album album, int track, String title) {
-		this.id = id;
-		this.isEmpty = false;
-		this.album = album;
-		this.track = track;
-		this.setTitle(title);
-	}
-
-	public Song(Album album, int track, String title) {
-		this.isEmpty = false;
-		this.album = album;
-		this.track = track;
-		this.setTitle(title);
+	public Song(int songId, String artistName, String albumName,
+			int songTrackNumber, String songName, String fileName) {
+		setId(songId);
+		setAlbumName(albumName);
+		setTrackNumber(songTrackNumber);
+		setName(songName);
+		setFileName(fileName);
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	public void setArtistName(String artistName) {
+		this.artistName = artistName;
+	}
+
+	public void setAlbumName(String albumName) {
+		this.albumName = albumName;
+	}
+
+	public void setTrackNumber(int trackNumber) {
+		this.trackNumber = trackNumber;
+	}
+
+	public void setName(String songName) {
+		this.name = songName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public int getId() {
 		return this.id;
 	}
 
-	public Album getAlbum() {
-		return this.album;
+	public String getArtistName() {
+		return this.artistName;
 	}
 
-	public void setAlbum(Album album) {
-		this.album = album;
+	public String getAlbumName() {
+		return this.albumName;
 	}
 
 	public int getTrackNumber() {
-		return this.track;
+		return this.trackNumber;
 	}
 
-	public void setTrackNumber(int track) {
-		this.track = track;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public String toString() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		if (title == null || title == "") {
-			title = "Untitled";
-		}
-		this.title = title;
-	}
-
-	public int getTrackLength() {
-		return this.songLength;
-	}
-
-	public String getFormatedLength() {
-		long time = getTrackLength();
-		String seconds = Integer.toString((int) (time % 60));
-		String minutes = Integer.toString((int) ((time % 3600) / 60));
-		String hours = Integer.toString((int) (time / 3600));
-		for (int i = 0; i < 2; i++) {
-			if (seconds.length() < 2) {
-				seconds = "0" + seconds;
-			}
-			if (minutes.length() < 2) {
-				minutes = "0" + minutes;
-			}
-			if (hours.length() < 2) {
-				hours = "0" + hours;
-			}
-		}
-		return hours + ":" + minutes + ":" + seconds;
-	}
-
-	public void setTrackLength(int length) {
-		this.songLength = length;
-	}
-
-	public boolean equals(Song song) {
-		if (this == song) {
-			return true;
-		}
-		return (this.getAlbum().equals(song.getAlbum())
-				&& this.getTrackNumber() == song.getTrackNumber() && this
-				.getTitle().equals(song.getTitle()));
+	public String getName() {
+		return this.name;
 	}
 
 	public String getArtistAlbum() {
-		return this.getAlbum().getArtist().toString() + " - "
-				+ this.getAlbum().toString();
+		return this.getAlbumName() + " - " + this.getAlbumName();
 	}
 
-	public boolean isEmpty() {
-		return this.isEmpty;
+	public String getFileName() {
+		return this.fileName;
 	}
 
-	public static Comparator<Song> CompareByTitle = new Comparator<Song>() {
-
-		@Override
-		public int compare(Song song1, Song song2) {
-			String songName1 = song1.getTitle()
-					.toLowerCase(Locale.getDefault());
-			String songName2 = song2.getTitle()
-					.toUpperCase(Locale.getDefault());
-			return songName1.compareTo(songName2);
-		}
-
-	};
-
-	public static Comparator<Song> CompareByAlbum = new Comparator<Song>() {
-		@Override
-		public int compare(Song song1, Song song2) {
-			String songName1 = song1.getAlbum().toString()
-					.toUpperCase(Locale.getDefault());
-			String songName2 = song2.getAlbum().toString()
-					.toUpperCase(Locale.getDefault());
-			return songName1.compareTo(songName2);
-		}
-	};
-
-	public Uri getFileName() {
-		// TODO Auto-generated method stub
-		return Uri.parse(this.filename);
+	public Uri getFileUri() {
+		return Uri.parse(this.fileName);
 	}
 
 }

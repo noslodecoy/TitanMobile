@@ -21,11 +21,11 @@ public class MediaScanner {
 	}
 
 	public void scan(User user) {
-		File home = new File(Environment.getExternalStorageDirectory()
-				.getPath());
-		id = user.library.getSongs().size();
-		this.user = user;
-		walk(home);
+//		File home = new File(Environment.getExternalStorageDirectory()
+//				.getPath());
+//		id = user.library.getSongs().size();
+//		this.user = user;
+//		walk(home);
 	}
 
 	private void walk(File root) {

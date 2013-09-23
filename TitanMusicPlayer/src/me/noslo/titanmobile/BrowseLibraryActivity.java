@@ -3,156 +3,182 @@ package me.noslo.titanmobile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import me.noslo.titanmobile.bll.Song;
-import me.noslo.titanmobile.dal.MusicLibraryDAO;
-
+import me.noslo.titanmobile.bll.Album;
 import com.example.titanmusicplayer.R;
 
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.app.ActionBar;
+import android.app.LoaderManager;
+import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.content.Loader;
+import android.database.Cursor;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
-import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.BaseAdapter;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseLibraryActivity extends TitanPlayerActivity {
-	public static final String EXTRA_ALBUM = "me.noslo.titanmobile.extra.ALBUM";
+public class BrowseLibraryActivity extends TitanPlayerActivity implements
+		OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+	public static final String EXTRA_ALBUM_ID = "me.noslo.titanmobile.extra.ALBUM";
 
-	private int selectedAlbumId;
-	private RetrieveDatabaseTask syncTask;
-	SyncLocalMediaTask syncMediaTask;
-	private ListView songList;
+	private long selectedAlbumId;
+	private ListView list;
+	private SongListCursorAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_browse_library);
+		setContentView(R.layout.activity_browse_albums);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		songList = (ListView) findViewById(R.id.browseLibraryListView);
-		syncTask = new RetrieveDatabaseTask();
-		syncTask.execute((Void) null);
+		selectedAlbumId = getIntent().getLongExtra(EXTRA_ALBUM_ID, 0);
 
-		selectedAlbumId = getIntent().getIntExtra(EXTRA_ALBUM, 0);
-	}
+		list = (ListView) findViewById(R.id.browseAlbumsListView);
+		list.setOnItemClickListener(this);
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.song_library_item, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		switch (item.getItemId()) {
-		case R.id.add_queue_item:
-			addQueueItem(getListItemSong(info.position));
-			return true;
-		default:
-			return super.onContextItemSelected(item);
-		}
-	}
-
-	protected void addQueueItem(Song song) {
-		Log.d( "BrowseLibraryActivity", "Add Queue Item" );
-		app.user.queue.addNew(song);
-	}
-
-	protected Song getListItemSong(int position) {
-		return (Song) songList.getAdapter().getItem(position);
+		this.fillList();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.browse_library, menu);
 		return true;
 	}
 
-	private void updateQueueList() {
-		ArrayList<Song> songs = (selectedAlbumId > 0) ? user.library.getAlbum(selectedAlbumId).getSongs() : user.library.getSongs();
+	private void fillList() {
 
+		String[] from = new String[] { MediaStore.Audio.Media.TITLE,
+				MediaStore.Audio.Media.ALBUM };
+		int[] to = new int[] { R.id.song_title, R.id.song_meta };
+
+		getLoaderManager().initLoader(0, null, this);
+		adapter = new SongListCursorAdapter( this );
+//		adapter = new SimpleCursorAdapter(this, R.layout.song_list_item, null,
+//				from, to, 0);
+
+		list.setAdapter(adapter);
+	}
+
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+		// Album album = getListItemAlbum(position);
+		// Intent intent = new Intent(this, BrowseLibraryActivity.class);
+		// intent.putExtra(BrowseLibraryActivity.EXTRA_ALBUM, album.getId());
+		// startActivity(intent);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		CursorLoader cursorLoader;
+		String[] projection = { MediaStore.Audio.Media._ID,
+				MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST,
+				MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA,
+				MediaStore.Audio.Media.TRACK };
+		Uri contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 		if (selectedAlbumId > 0) {
-			Collections.sort(songs, new Comparator<Song>() {
-				public int compare(Song song1, Song song2) {
-					if (song1.getTrackNumber() > song2.getTrackNumber()) {
-						return 1;
-					} else if (song1.getTrackNumber() < song2.getTrackNumber()) {
-						return -1;
-					}
-					return 0;
-				}
-			});
+			cursorLoader = new CursorLoader(this, contentUri, projection,
+					MediaStore.Audio.Media.ALBUM_ID + "=?",
+					new String[] { String.valueOf(selectedAlbumId) },
+					MediaStore.Audio.Media.TRACK);
 		} else {
-			Collections.sort(songs, new Comparator<Song>() {
-				public int compare(Song song1, Song song2) {
-					return song1.getTitle().compareToIgnoreCase(song2.getTitle());
-				}
-			});
+			cursorLoader = new CursorLoader(this, contentUri, projection, null,
+					null, MediaStore.Audio.Media.TITLE_KEY);
 		}
-
-		SongListAdapter adapter = new SongListAdapter(this, R.layout.song_list_item, songs);
-		songList.setAdapter(adapter);
-		registerForContextMenu(songList);
+		return cursorLoader;
 	}
 
-	public class RetrieveDatabaseTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			app.user.library.sync();
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			syncTask = null;
-			updateQueueList();
-			Log.d( "SYNC", "Start syncing local media" );
-			syncMediaTask = new SyncLocalMediaTask();
-			syncMediaTask.execute((Void) null);
-		}
-
-		@Override
-		protected void onCancelled() {
-			syncTask = null;
-		}
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		adapter.swapCursor(data);
 	}
 
-	public class SyncLocalMediaTask extends AsyncTask<Void, Void, Boolean> {
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		adapter.swapCursor(null);
+	}
+
+	public class SongListCursorAdapter extends CursorAdapter {
+
+		private LayoutInflater inflater;
+		private int titleIndex;
+		private int artistIndex;
+		private int albumIndex;
+		private int fileIndex;
+		private int trackIndex;
+
+		public SongListCursorAdapter(Context context) {
+			super(context, null, 0);
+			inflater = LayoutInflater.from(context);
+
+		}
+
+//		private void getColumnIndexes(Cursor cursor) {
+//			if ( cursor != null ) {
+//			titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+//			artistIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+//			albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+//			fileIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+//			trackIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
+//			}
+//		}
+
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			MusicLibraryDAO.scanMedia(user, MusicLibraryDAO.getDb());
-			app.user.library.sync();
-			return true;
+		public Cursor swapCursor(Cursor cursor) {
+			cursor = super.swapCursor(cursor);
+			//getColumnIndexes(cursor);
+			return cursor;
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
-			syncMediaTask = null;
-			Log.d( "SYNC", "Done syncing local media" );
+		public void bindView(View view, Context context, Cursor cursor) {
+
+			titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+			artistIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+			albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+			fileIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+			trackIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TRACK);
 			
-			int index = songList.getFirstVisiblePosition();
-			updateQueueList();
-			songList.setSelectionFromTop(index, 0);
+			
+			TextView songTitle = (TextView) view.findViewById(R.id.song_title);
+			TextView songMeta = (TextView) view.findViewById(R.id.song_meta);
+			songTitle.setText(cursor.getString(titleIndex));
+			songMeta.setText(cursor.getString(artistIndex) + " - "
+					+ cursor.getString(albumIndex));
+
+			// songTitle.setText(cursor.getString(mActivityIndex));
+			//
+			// long lTime = cursor.getLong(mTimeIndex);
+			// Calendar cal = Calendar.getInstance();
+			// cal.setTimeInMillis(lTime);
+			// time.setText(cal.get(Calendar.HOUR_OF_DAY) + “:” +
+			// String.format(“%02d”, cal.get(Calendar.MINUTE)));
+			//
+			// String amount = cursor.getString(mAmountIndex);
+			// if ( amount.length() > 0){
+			// actionAndAmount.setText(cursor.getString(mActionIndex) + ” (” +
+			// amount + “)”);
+			// } else {
+			// actionAndAmount.setText(cursor.getString(mActionIndex));
+			// }
+			//
+
 		}
 
 		@Override
-		protected void onCancelled() {
-			syncMediaTask = null;
+		public View newView(Context context, Cursor cursor, ViewGroup parent) {
+			return inflater.inflate(R.layout.song_list_item, null);
 		}
 	}
-
 }

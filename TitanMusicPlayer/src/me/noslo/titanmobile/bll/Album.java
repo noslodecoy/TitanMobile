@@ -1,37 +1,32 @@
 package me.noslo.titanmobile.bll;
 
-public class Album extends SongList {
+public class Album implements MediaLibraryObject {
 
-	private Artist artist;
-	private static int uniqueId = 0;
+	private int id;
+	private String name;
+	private String artistName;
 
-	public Album(Artist artist, String name) {
-		super(name);
-		this.artist = artist;
-		this.setId(++uniqueId);
+	public Album(int albumId, String albumName) {
+		id = albumId;
+		name = albumName;
+	}
+	
+	public Album(int albumId, String albumName, String albumArtistName) {
+		id = albumId;
+		name = albumName;
+		artistName = albumArtistName;
 	}
 
-	public Album() {
-		super();
-		this.artist = new Artist();
-		this.setId(++uniqueId);
+	public String getName() {
+		return name;
+	}
+	
+	public String getArtistName() {
+		return artistName;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
-	public Artist getArtist() {
-		return this.artist;
-	}
-
-	@Override
-	public void setName(String name) {
-		if (name == null || name == "") {
-			name = "Untitled";
-		}
-		super.setName(name);
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		return (object != null && object instanceof Album && (this.toString()
-				.equals(object.toString())));
-	}
 }

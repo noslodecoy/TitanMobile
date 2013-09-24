@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 public class Playlist {
 
@@ -28,10 +29,17 @@ public class Playlist {
 		mLastPlayOrder = 0;
 	}
 
-	public Playlist(long id) {
+	public Playlist( String name ) {
+		mSongs = new ArrayList<Song>();
+		mLastPlayOrder = 0;
+		mName = name;
+	}
+
+	public Playlist(Context context, long id) {
 		mId = id;
 		mSongs = new ArrayList<Song>();
 		mLastPlayOrder = 0;
+		loadId(context, mId);
 	}
 
 	public void setName(String name) {
@@ -81,7 +89,8 @@ public class Playlist {
 		}
 	}
 
-	public boolean commit(Context context) {
+	public boolean save(Context context) {
+		Log.d( "Playlist", "creating playlist..." );
 		ContentResolver resolver = context.getContentResolver();
 		ContentValues mInserts = new ContentValues();
 		mInserts.put(MediaStore.Audio.Playlists.NAME, mName);
@@ -89,9 +98,11 @@ public class Playlist {
 		mInserts.put(MediaStore.Audio.Playlists.DATE_MODIFIED, System.currentTimeMillis());
 		Uri uri = resolver.insert(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, mInserts);
 		if (uri != null) {
-			Cursor cursor = resolver.query(uri, INSERT_PROJECTION_PLAYLIST, null, null, null);
+			Cursor cursor = resolver.query(uri, new String[]{MediaStore.Audio.Playlists._ID}, null, null, null);
 			if (cursor != null) {
+				cursor.moveToFirst();
 				mId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Playlists._ID));
+				Log.d( "Playlist", "create palylist: "+mId );
 				cursor.close();
 				return true;
 			}

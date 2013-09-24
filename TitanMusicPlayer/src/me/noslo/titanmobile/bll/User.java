@@ -7,7 +7,7 @@ import java.util.Random;
 public class User {
 
 	public MediaLibrary library;
-	private String username;
+	private String mUsername;
 	public SongQueue queue;
 
 	public User() {
@@ -31,11 +31,11 @@ public class User {
 //	}
 
 	public String getUsername() {
-		return this.username;
+		return this.mUsername;
 	}
 
 	public void setUserName(String username) {
-		this.username = username;
+		this.mUsername = username;
 	}
 
 }

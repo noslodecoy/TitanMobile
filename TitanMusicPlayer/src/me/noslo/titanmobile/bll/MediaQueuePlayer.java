@@ -36,7 +36,7 @@ public class MediaQueuePlayer {
 	}
 
 	public String getSongTitleOfCurrentTrack() {
-		String songTitle = getCurrentSong().getTitle();
+		String songTitle = getCurrentSong().getName();
 		return songTitle;
 	}
 
@@ -49,7 +49,7 @@ public class MediaQueuePlayer {
 			}
 
 			mPlayer = android.media.MediaPlayer.create(context,
-					getCurrentSong().getFileName());
+					getCurrentSong().getFileUri());
 			try {
 				mPlayer.prepare();
 			} catch (IllegalStateException e) {

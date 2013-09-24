@@ -1,109 +1,116 @@
 package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import me.noslo.titanmobile.dal.MusicLibraryDAO;
 
 public class MediaLibrary {
 
 	private User user;
-	private ArrayList<Artist> artists;
-	private ArrayList<Album> albums;
-	private ArrayList<Song> songs;
-	
+	public static String[] ARTIST_PROJECTION = new String[] { MediaStore.Audio.Media._ID,
+			MediaStore.Audio.Media.ARTIST };
 
-	
+	public static String[] ALBUM_PROJECTION = new String[] { MediaStore.Audio.Media._ID,
+			MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST };
+
+	public static String[] SONG_PROJECTION = new String[] { MediaStore.Audio.Media._ID,
+			MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
+			MediaStore.Audio.Media.TRACK, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA };
+
 	MediaLibrary(User user) {
 		this.user = user;
-		this.artists = new ArrayList<Artist>();
-		this.albums = new ArrayList<Album>();
-		this.songs = new ArrayList<Song>();
 	}
-	
+
 	public User getUser() {
 		return this.user;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "MusicLibrary";
 	}
 
-	public void sync() {
-		this.artists = new ArrayList<Artist>();
-		this.albums = new ArrayList<Album>();
-		this.songs = new ArrayList<Song>();
-		MusicLibraryDAO.fetchLibrary(user);
+	public void getQueue(User user) {
+		// MusicLibraryDAO.fetchQueue(user);
 	}
 
-	public void addSong(Song song) {
-		this.songs.add(song);
-	}
+	public ArrayList<Artist> getArtistArrayList(Context context) {
 
-	public ArrayList<Song> getSongs() {
-		return this.songs;
-	}
-	
-	public Song getSong( int id ) {
-		for ( Song song : songs ) {
-			if ( id == song.getId() ) {
-				return song;
-			}
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+
+		ContentResolver contentResolver = context.getContentResolver();
+		Uri contentUri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+		Cursor cursor = contentResolver.query(contentUri, ARTIST_PROJECTION, null, null,
+				MediaStore.Audio.Media.ARTIST_KEY);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Artist artist = new Artist(cursor.getLong(0), cursor.getString(1));
+			artists.add(artist);
+			cursor.moveToNext();
 		}
-		return null;
-	}
-	
-	public ArrayList<Album> getAlbums() {
-		return this.albums;
+		cursor.close();
+		return artists;
 	}
 
-	public ArrayList<Artist> getArtists() {
-		return this.artists;
-	}
-	
-	public Album getAlbum( int albumId ) {
-		for (Album album : this.albums ) {
-			if ( album.getId() == albumId ) {
-				return album;
-			}
+	public ArrayList<Album> getAlbumArrayList(Context context, long artistId) {
+		ArrayList<Album> albums = new ArrayList<Album>();
+		ContentResolver contentResolver = context.getContentResolver();
+		Uri contentUri;
+		if (artistId > 0) {
+			contentUri = MediaStore.Audio.Artists.Albums.getContentUri("external", artistId);
+		} else {
+			contentUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
 		}
-		return new Album();
-	}
-	
-	public Artist getArtist( int artistId ) {
-		for (Artist artist : this.artists ) {
-			if ( artist.getId() == artistId ) {
-				return artist;
-			}
+		Cursor cursor = contentResolver.query(contentUri, ALBUM_PROJECTION, null, null,
+				MediaStore.Audio.Media.ALBUM_KEY);
+		cursor.moveToFirst();
+
+		while (!cursor.isAfterLast()) {
+			Album album = new Album(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
+			albums.add(album);
+			cursor.moveToNext();
 		}
-		return new Artist();
+		cursor.close();
+		return albums;
 	}
 
-	public Artist addArtist(String artistString) {
-		Artist artist = new Artist(artistString);
-		if (!artists.contains(artist)) {
-			this.artists.add(artist);
-			return artist;
+	public ArrayList<Song> getSongArrayList(Context context, long albumId) {
+		ContentResolver contentResolver = context.getContentResolver();
+		Uri contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		String selection;
+		String[] selectionArgs;
+		String sortOrder;
+
+		ArrayList<Song> songs = new ArrayList<Song>();
+
+		if (albumId > 0) {
+			selection = MediaStore.Audio.Media.ALBUM_ID + "=?";
+			selectionArgs = new String[] { String.valueOf(albumId) };
+			sortOrder = MediaStore.Audio.Media.TRACK;
+		} else {
+			selection = null;
+			selectionArgs = null;
+			sortOrder = MediaStore.Audio.Media.TITLE_KEY;
 		}
-		return artists.get(artists.indexOf(artist));
-	}
 
-	public Album addAlbum(Artist artist, String albumString) {
-		Album album = new Album(artist, albumString);
-		if (!albums.contains(album)) {
-			this.albums.add(album);
-			return album;
+		Cursor cursor = contentResolver.query(contentUri, SONG_PROJECTION, selection,
+				selectionArgs, sortOrder);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Song song = new Song(cursor.getLong(0), cursor.getString(1), cursor.getString(2),
+					cursor.getInt(3), cursor.getString(4), cursor.getString(5));
+			songs.add(song);
+			cursor.moveToNext();
 		}
-		return albums.get(albums.indexOf(album));
-	}
-
-	public Song addSong(int id, Album album, int trackNumber, String titleString, String filename) {
-		Song song = new Song(id, album, trackNumber, titleString, filename);
-		this.songs.add(song);
-		return song;
-	}
-
-	public void getQueue( User user ) {
-		MusicLibraryDAO.fetchQueue(user);
+		cursor.close();
+		return songs;
 	}
 
 }

@@ -14,28 +14,27 @@ import android.widget.TextView;
 //SongArrayAdapter
 public class SongListAdapter extends ArrayAdapter<Song> {
 
-	private int layoutResId;
-	private Context context;
-	private ArrayList<Song> songs;
+	private int mLayoutResId;
+	private Context mContext;
+	private ArrayList<Song> mSongs;
 
-	public SongListAdapter(Context context, int layoutResId,
-			ArrayList<Song> songs) {
+	public SongListAdapter(Context context, int layoutResId, ArrayList<Song> songs) {
 		super(context, layoutResId, songs);
-		this.layoutResId = layoutResId;
-		this.context = context;
-		this.songs = songs;
+		this.mLayoutResId = layoutResId;
+		this.mContext = context;
+		this.mSongs = songs;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-		View row = inflater.inflate(this.layoutResId, parent, false);
+		LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+		View row = inflater.inflate(this.mLayoutResId, parent, false);
 
-		Song song = songs.get(position);
+		Song song = mSongs.get(position);
 
 		TextView text1 = (TextView) row.findViewById(R.id.song_title);
 		TextView text2 = (TextView) row.findViewById(R.id.song_meta);
-		text1.setText(song.getTitle());
+		text1.setText(song.getName());
 		text2.setText(song.getArtistAlbum());
 
 		return row;

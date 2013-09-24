@@ -20,13 +20,13 @@ public class MediaScanner {
 		this.db = db;
 	}
 
-	public void scan(User user) {
-		File home = new File(Environment.getExternalStorageDirectory()
-				.getPath());
-		id = user.library.getSongs().size();
-		this.user = user;
-		walk(home);
-	}
+//	public void scan(User user) {
+//		File home = new File(Environment.getExternalStorageDirectory()
+//				.getPath());
+//		id = user.library.getSongs().size();
+//		this.user = user;
+//		walk(home);
+//	}
 
 	private void walk(File root) {
 

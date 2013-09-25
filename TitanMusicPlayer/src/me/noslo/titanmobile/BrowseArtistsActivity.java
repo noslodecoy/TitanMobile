@@ -1,14 +1,9 @@
 package me.noslo.titanmobile;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-import me.noslo.titanmobile.BrowseLibraryActivity.FetchSongsTask;
 import me.noslo.titanmobile.bll.Artist;
-import me.noslo.titanmobile.bll.Song;
 
-import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.content.Context;
@@ -45,7 +40,7 @@ public class BrowseArtistsActivity extends TitanPlayerActivity implements OnItem
 
 	private void fillList() {
 		mList = (ListView) findViewById(R.id.browseArtistsListView);
-		mArtists = user.library.getArtistArrayList(this);
+		mArtists = library.artists.fetchAll();
 		mAdapter = new ArtistListAdapter(this,
 				android.R.layout.simple_list_item_2, android.R.id.text1, mArtists);
 		mList.setAdapter(mAdapter);
@@ -61,8 +56,6 @@ public class BrowseArtistsActivity extends TitanPlayerActivity implements OnItem
 	}
 
 	public class ArtistListAdapter extends ArrayAdapter<Artist> {
-
-		ArrayList<Artist> artists;
 
 		public ArtistListAdapter(Context context, int layoutResId, int textViewResourceId,
 				ArrayList<Artist> artists) {

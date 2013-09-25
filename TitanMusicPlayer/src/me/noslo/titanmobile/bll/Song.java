@@ -22,6 +22,10 @@ public class Song implements MediaLibraryObject {
 		setFileName(fileName);
 	}
 
+	public Song(long songId) {
+		setId(songId);
+	}
+
 	public void setId(long id) {
 		this.id = id;
 	}

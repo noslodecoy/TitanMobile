@@ -2,8 +2,8 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 
-import me.noslo.titanmobile.dal.MediaStorePlaylistDAO;
-import me.noslo.titanmobile.dal.PlaylistDAO;
+import me.noslo.titanmobile.dal.mediaLibrary.PlaylistDAO;
+import me.noslo.titanmobile.dal.mediaLibrary.mediaStore.MediaStorePlaylistDAO;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -17,25 +17,22 @@ public class Playlist {
 
 	private String mName;
 	private long mId;
-	private ArrayList<Song> mSongs;
-	private long mLastPlayOrder;
+	private ArrayList<PlaylistItem> mPlaylistItems;
+	private static final String TAG = "Playlist";
 
 	public Playlist() {
-		mSongs = new ArrayList<Song>();
-		mLastPlayOrder = 0;
+		mPlaylistItems = new ArrayList<PlaylistItem>();
 	}
 
 	public Playlist(String name) {
-		mSongs = new ArrayList<Song>();
-		mLastPlayOrder = 0;
+		mPlaylistItems = new ArrayList<PlaylistItem>();
 		mName = name;
 	}
 
-	public Playlist(Context context, long id) {
+	public Playlist(long id, String name) {
 		mId = id;
-		mSongs = new ArrayList<Song>();
-		mLastPlayOrder = 0;
-		loadId(context, mId);
+		mName = name;
+		mPlaylistItems = new ArrayList<PlaylistItem>();
 	}
 
 	public void setName(String name) {
@@ -45,56 +42,43 @@ public class Playlist {
 	public String getName() {
 		return mName;
 	}
-
-	public void loadId(Context context, long id) {
-		mSongs.clear();
-		Cursor cursor = context.getContentResolver()
-				.query(MediaStore.Audio.Playlists.Members.getContentUri("external", id),
-						PROJECTION_PLAYLIST_ITEM, null, null,
-						MediaStore.Audio.Playlists.Members.PLAY_ORDER);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			PlaylistItem song = new PlaylistItem(cursor.getLong(0), cursor.getLong(1),
-					cursor.getString(2), cursor.getString(3), cursor.getInt(4),
-					cursor.getString(5), cursor.getString(6));
-			mLastPlayOrder = cursor.getLong(7);
-			mSongs.add(song);
-			cursor.moveToNext();
-		}
-		cursor.close();
-	}
-
+	
 	public long getId() {
 		return mId;
-	}
-
-	public void add(Context context, Song song) {
-		if (mId > 0) {
-			PlaylistItem playlistItem = new PlaylistItem(song);
-			ContentResolver resolver = context.getContentResolver();
-			Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", mId);
-			ContentValues values = new ContentValues();
-			values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, ++mLastPlayOrder);
-			values.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, playlistItem.getSongId());
-			resolver.insert(uri, values);
-
-			Cursor cursor = resolver.query(uri, PROJECTION_PLAYLIST_ITEM, null, null, null);
-			if (cursor != null) {
-				cursor.moveToFirst();
-				playlistItem.setId(cursor.getLong(cursor
-						.getColumnIndex(MediaStore.Audio.Playlists.Members._ID)));
-				cursor.close();
-			}
-		}
-	}
-
-	public boolean save(Context context) {
-		PlaylistDAO dao = new MediaStorePlaylistDAO(context);
-		return dao.save(this);
 	}
 
 	public void setId(long id) {
 		mId = id;
 	}
 
+	public void add( PlaylistItem playlistItem ) {
+		mPlaylistItems.add( playlistItem );
+	}
+	
+	public void addReplaceAll( ArrayList<PlaylistItem> playlistItems ) {
+		mPlaylistItems.clear();
+		Log.d( TAG, "add replace all playlist: "+playlistItems.size() );
+		mPlaylistItems.addAll(playlistItems);
+	}
+	
+	public ArrayList<PlaylistItem> getAll() {
+		return mPlaylistItems;
+	}
+
+	public int size() {
+		return mPlaylistItems.size();
+	}
+
+	public PlaylistItem get(int i) {
+		return mPlaylistItems.get(i);
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	public void remove(PlaylistItem song) {
+		mPlaylistItems.remove(song);		
+	}
 }

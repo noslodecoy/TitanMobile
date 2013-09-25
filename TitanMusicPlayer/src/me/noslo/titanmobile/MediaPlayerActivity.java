@@ -1,7 +1,6 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.bll.Song;
-import com.example.titanmusicplayer.R;
+import me.noslo.titanmobile.bll.PlaylistItem;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -24,12 +22,13 @@ import android.os.Handler;
 import android.app.AlertDialog;
 import android.content.Intent;
 
-public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener, OnSeekBarChangeListener {
+public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener,
+		OnSeekBarChangeListener {
 
 	private ListView mSongList;
 	private SeekBar progressBar;
 	private RetrieveQueueTask queueTask;
-	SongListAdapter mAdapter;
+	PlayListItemAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +37,20 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 		progressBar = (SeekBar) findViewById(R.id.progressBar);
 		progressBar.setOnSeekBarChangeListener(this);
-		
 
-		
 		fillList();
-//		queueTask = new RetrieveQueueTask();
-//		queueTask.execute((Void)null);
-		
+		// queueTask = new RetrieveQueueTask();
+		// queueTask.execute((Void)null);
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//((BaseAdapter) songList.getAdapter()).notifyDataSetChanged();
+		
+		app.queue.addReplaceAll( library.playlistItems.fetch(app.queue) );
+		mAdapter.notifyDataSetChanged();
+
 		drawPlayBtn();
 	}
 
@@ -74,7 +74,7 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		finishPlaying();
 		updateCurrentlyPlaying();
 	}
-	
+
 	public void finishPlaying() {
 		progressBar.setProgress(0);
 		mHandler.removeCallbacks(mUpdateTimeTask);
@@ -146,6 +146,11 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 			startActivity(intent);
 			return true;
 		}
+		case R.id.action_browse_playlists: {
+			Intent intent = new Intent(this, BrowsePlaylistsActivity.class);
+			startActivity(intent);
+			return true;
+		}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -175,18 +180,22 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		}
 	}
 
-	protected void removeQueueItem(Song song) {
-		user.queue.remove(song);
-		((BaseAdapter) mSongList.getAdapter()).notifyDataSetChanged();
+	protected void removeQueueItem(PlaylistItem song) {
+		// user.queue.remove(song);
+		
+		library.playlistItems.removeFrom( app.queue, song);
+		app.queue.remove( song );
+		mAdapter.notifyDataSetChanged();
 	}
 
-	protected Song getListItemSong(int position) {
-		return (Song) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(position);
+	protected PlaylistItem getListItemSong(int position) {
+		return (PlaylistItem) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(
+				position);
 	}
 
 	private void fillList() {
 		mSongList = (ListView) findViewById(R.id.currentlyPlayingQueue);
-		mAdapter = new SongListAdapter(this, R.layout.song_list_item, user.queue.getAll());
+		mAdapter = new PlayListItemAdapter(this, R.layout.song_list_item, app.queue.getAll());
 		mSongList.setAdapter(mAdapter);
 		mSongList.setOnItemClickListener(this);
 		mSongList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -198,26 +207,23 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 	public void updateProgressBar() {
 		mHandler.postDelayed(mUpdateTimeTask, 100);
 	}
-	
+
 	@Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // remove message Handler from updating progress bar
-        mHandler.removeCallbacks(mUpdateTimeTask);
-    }
- 
-    /**
-     * When user stops moving the progress hanlder
-     * */
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        app.mediaPlayer.setProgressPercent(seekBar.getProgress());
-        updateProgressBar();
-    }
+	public void onStartTrackingTouch(SeekBar seekBar) {
+		// remove message Handler from updating progress bar
+		mHandler.removeCallbacks(mUpdateTimeTask);
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		mHandler.removeCallbacks(mUpdateTimeTask);
+		app.mediaPlayer.setProgressPercent(seekBar.getProgress());
+		updateProgressBar();
+	}
 
 	private Runnable mUpdateTimeTask = new Runnable() {
 		public void run() {
-			Log.d("UPDATING", "Progress Bar "+app.mediaPlayer.getProgressPercent()+"%");
+			Log.d("UPDATING", "Progress Bar " + app.mediaPlayer.getProgressPercent() + "%");
 			int progress = (int) (app.mediaPlayer.getProgressPercent());
 			progressBar.setProgress(progress);
 			mHandler.postDelayed(this, 100);
@@ -227,24 +233,20 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 	@Override
 	public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
-	
+
 	public class RetrieveQueueTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			app.user.library.getQueue( app.user );
+			// app.user.library.getQueue( app.user );
 			return true;
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			queueTask = null;
-			//updateQueueList();
+			// updateQueueList();
 		}
 
 		@Override

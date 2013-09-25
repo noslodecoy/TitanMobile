@@ -1,7 +1,8 @@
 package me.noslo.titanmobile;
 
-import me.noslo.titanmobile.dal.MusicLibraryDAO;
-import com.example.titanmusicplayer.R;
+import me.noslo.titanmobile.dal.MediaLibraryDAO;
+import me.noslo.titanmobile.deprecating.MusicLibraryDAO;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;

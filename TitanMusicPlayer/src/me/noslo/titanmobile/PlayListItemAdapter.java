@@ -1,6 +1,8 @@
 package me.noslo.titanmobile;
 
 import java.util.ArrayList;
+
+import me.noslo.titanmobile.bll.PlaylistItem;
 import me.noslo.titanmobile.bll.Song;
 import android.app.Activity;
 import android.content.Context;
@@ -11,13 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 //SongArrayAdapter
-public class SongListAdapter extends ArrayAdapter<Song> {
+public class PlayListItemAdapter extends ArrayAdapter<PlaylistItem> {
 
 	private int mLayoutResId;
 	private Context mContext;
-	private ArrayList<Song> mSongs;
+	private ArrayList<PlaylistItem> mSongs;
 
-	public SongListAdapter(Context context, int layoutResId, ArrayList<Song> arrayList) {
+	public PlayListItemAdapter(Context context, int layoutResId, ArrayList<PlaylistItem> arrayList) {
 		super(context, layoutResId, arrayList);
 		this.mLayoutResId = layoutResId;
 		this.mContext = context;

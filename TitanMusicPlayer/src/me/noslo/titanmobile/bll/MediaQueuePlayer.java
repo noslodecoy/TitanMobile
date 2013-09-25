@@ -1,32 +1,35 @@
 package me.noslo.titanmobile.bll;
 
 import java.io.IOException;
+
+import me.noslo.titanmobile.deprecating.SongList;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
 public class MediaQueuePlayer {
 
-	private SongList queue;
-	private int playlistIndex;
-	private boolean isPlaying;
-	private long startTime;
-	private Context context;
+	private Playlist mQueue;
+	private int mPlaylistIndex;
+	private boolean mIsPlaying;
+	private long mStartTime;
+	private Context mContext;
 
 	private MediaPlayer mPlayer;
 
-	public MediaQueuePlayer(Context context, SongList queue) {
-		this.context = context;
-		this.queue = queue;
-		playlistIndex = 0;
-		isPlaying = false;
-		startTime = 0;
+	public MediaQueuePlayer(Context context, Playlist queue) {
+		this.mContext = context;
+		mQueue = queue;
+		mPlaylistIndex = 0;
+		mIsPlaying = false;
+		mStartTime = 0;
 	}
 
+
 	public Song getSong() {
-		if (queue.size() > 0 && getPosition() < queue.size()
+		if (mQueue.size() > 0 && getPosition() < mQueue.size()
 				&& getPosition() >= 0) {
-			return queue.get(playlistIndex);
+			return mQueue.get(mPlaylistIndex);
 		}
 		return null;
 	}
@@ -41,14 +44,14 @@ public class MediaQueuePlayer {
 	}
 
 	public void play() {
-		if (queue.size() > 0) {
-			isPlaying = true;
+		if (mQueue.size() > 0) {
+			mIsPlaying = true;
 
 			if (mPlayer != null) {
 				mPlayer.stop();
 			}
 
-			mPlayer = android.media.MediaPlayer.create(context,
+			mPlayer = android.media.MediaPlayer.create(mContext,
 					getCurrentSong().getFileUri());
 			try {
 				mPlayer.prepare();
@@ -68,26 +71,26 @@ public class MediaQueuePlayer {
 	}
 
 	public long getStartTime() {
-		return startTime;
+		return mStartTime;
 	}
 
 	public void stop() {
-		if (isPlaying) {
+		if (mIsPlaying) {
 			mPlayer.stop();
 		}
-		startTime = 0;
-		isPlaying = false;
+		mStartTime = 0;
+		mIsPlaying = false;
 	}
 
 	public boolean isPlaying() {
-		return isPlaying;
+		return mIsPlaying;
 	}
 
 	public void skipForward() {
 		boolean wasPlaying = isPlaying();
 		stop();
-		if ((playlistIndex + 1) < queue.size()) {
-			++playlistIndex;
+		if ((mPlaylistIndex + 1) < mQueue.size()) {
+			++mPlaylistIndex;
 		}
 		if (wasPlaying) {
 			play();
@@ -97,37 +100,37 @@ public class MediaQueuePlayer {
 	public void skipToEnd() {
 		boolean wasPlaying = isPlaying();
 		stop();
-		playlistIndex = queue.size() - 1;
+		mPlaylistIndex = mQueue.size() - 1;
 		if (wasPlaying) {
 			play();
 		}
 	}
 
 	public void setPosition(int i) {
-		playlistIndex = i;
+		mPlaylistIndex = i;
 	}
 
 	public int getPosition() {
-		if (playlistIndex < 0 || playlistIndex >= queue.size()) {
-			playlistIndex = 0;
+		if (mPlaylistIndex < 0 || mPlaylistIndex >= mQueue.size()) {
+			mPlaylistIndex = 0;
 		}
-		return playlistIndex;
+		return mPlaylistIndex;
 	}
 
 	public void skipBackward() {
 
 		boolean wasPlaying = isPlaying();
 		stop();
-		if ((playlistIndex - 1) >= 0) {
-			--playlistIndex;
+		if ((mPlaylistIndex - 1) >= 0) {
+			--mPlaylistIndex;
 		}
 		if (wasPlaying) {
 			play();
 		}
 	}
 
-	public SongList getQueue() {
-		return queue;
+	public Playlist getQueue() {
+		return mQueue;
 	}
 
 	public void pause() {
@@ -143,10 +146,10 @@ public class MediaQueuePlayer {
 	}
 
 	public void seekToTime(long time) {
-			boolean wasPlaying = isPlaying;
-			startTime = time;
+			boolean wasPlaying = mIsPlaying;
+			mStartTime = time;
 			if (wasPlaying) {
-				isPlaying = true;
+				mIsPlaying = true;
 			} else {
 			}
 	}

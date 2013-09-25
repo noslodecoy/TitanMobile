@@ -1,4 +1,4 @@
-package me.noslo.titanmobile.dal;
+package me.noslo.titanmobile.deprecating;
 
 import android.provider.BaseColumns;
 

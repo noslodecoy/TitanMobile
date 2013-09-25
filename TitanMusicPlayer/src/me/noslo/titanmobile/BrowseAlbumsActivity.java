@@ -8,7 +8,6 @@ import me.noslo.titanmobile.BrowseArtistsActivity.ArtistListAdapter;
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Artist;
 
-import com.example.titanmusicplayer.R;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.content.Context;
@@ -27,9 +26,9 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 
 	public static final String EXTRA_ARTIST = "me.noslo.titanmobile.extra.ARTIST";
 
-	private long mArtistId;
 	private ListView mList;
 	private ArrayList<Album> mAlbums;
+	private Artist mArtist;
 	AlbumListAdapter mAdapter;
 
 	@Override
@@ -38,7 +37,15 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 		setContentView(R.layout.activity_browse_albums);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		mArtistId = getIntent().getLongExtra(EXTRA_ARTIST, 0);
+		getArtist();
+		
+		long artistId = getIntent().getLongExtra(EXTRA_ARTIST, 0);
+		if ( artistId > 0 ) {
+			mArtist = library.artists.load( artistId );
+		} else {
+			mArtist = null;
+		}
+		
 		fillList();
 	}
 
@@ -47,9 +54,15 @@ public class BrowseAlbumsActivity extends TitanPlayerActivity implements OnItemC
 		getMenuInflater().inflate(R.menu.browse_library, menu);
 		return true;
 	}
+	
+	private void getArtist() {
+
+	}
 
 	private void fillList() {
-		mAlbums = user.library.getAlbumArrayList(this, mArtistId);
+		Log.d("ARTIST", "Selected artist: "+mArtist);
+		mAlbums = library.albums.fetch(mArtist);
+
 		mList = (ListView) findViewById(R.id.browseAlbumsListView);
 		mAdapter = new AlbumListAdapter(this, android.R.layout.simple_list_item_2,
 				android.R.id.text1, mAlbums);

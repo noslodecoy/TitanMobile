@@ -26,5 +26,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="remove_song">Remove Song</string>
     <string name="add_song_to_queue">Add Song to Queue</string>
+    <string name="delete_playlist">Delete Playlist</string>
+    <string name="cant_delete_queue">Can\'t delete the now playing queue playlist.</string>
     
 </resources>

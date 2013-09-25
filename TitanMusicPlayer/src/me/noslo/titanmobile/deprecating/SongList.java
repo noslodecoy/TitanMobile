@@ -1,6 +1,8 @@
-package me.noslo.titanmobile.bll;
+package me.noslo.titanmobile.deprecating;
 
 import java.util.*;
+
+import me.noslo.titanmobile.bll.Song;
 
 public class SongList {
 

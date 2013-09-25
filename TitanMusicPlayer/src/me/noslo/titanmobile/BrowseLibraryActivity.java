@@ -1,11 +1,15 @@
 package me.noslo.titanmobile;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+
+import me.noslo.titanmobile.bll.Album;
+import me.noslo.titanmobile.bll.Playlist;
 import me.noslo.titanmobile.bll.Song;
-import com.example.titanmusicplayer.R;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -20,7 +24,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class BrowseLibraryActivity extends TitanPlayerActivity {
 	public static final String EXTRA_ALBUM = "me.noslo.titanmobile.extra.ALBUM";
 
-	private long mSelectedAlbumId;
+	private Album mAlbum;
 	private FetchSongsTask mFetchSongsTask;
 	private ListView mList;
 	private ArrayList<Song> mSongs;
@@ -33,18 +37,27 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		setContentView(R.layout.activity_browse_library);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		mSelectedAlbumId = getIntent().getLongExtra(EXTRA_ALBUM, 0);
 		mSongs = new ArrayList<Song>();
 		mContext = this;
+		getAlbum();
 		fillList();
 	}
-	
+
+	private void getAlbum() {
+		long selectedAlbumId = getIntent().getLongExtra(EXTRA_ALBUM, 0);
+		if (selectedAlbumId > 0) {
+			mAlbum = library.albums.load(selectedAlbumId);
+			return;
+		}
+		mAlbum = null;
+	}
+
 	private void fillList() {
 		mList = (ListView) findViewById(R.id.browseLibraryListView);
 		mAdapter = new SongListAdapter(this, R.layout.song_list_item, mSongs);
 		mList.setAdapter(mAdapter);
 		registerForContextMenu(mList);
-		if ( mFetchSongsTask == null ) {
+		if (mFetchSongsTask == null) {
 			mFetchSongsTask = new FetchSongsTask();
 			mFetchSongsTask.execute((Void) null);
 		}
@@ -64,13 +77,26 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		case R.id.add_queue_item:
 			addQueueItem(mAdapter.getItem(info.position));
 			return true;
+		case R.id.add_to_playlist:
+			showAddToPlaylistDialog(mAdapter.getItem(info.position));
+			return true;
 		default:
 			return super.onContextItemSelected(item);
 		}
 	}
+	
+	private void showAddToPlaylistDialog( Song song) {
+		Bundle bundle = new Bundle();
+		bundle.putLong( "song_id", song.getId() );
+		
+		
+        DialogFragment dialog = new SelectPlaylistDialogFragment();
+        dialog.setArguments( bundle );
+        dialog.show(getFragmentManager(), "NoticeDialogFragment");
+	}
 
 	protected void addQueueItem(Song song) {
-		app.user.queue.addNew(song);
+		library.playlistItems.addTo(app.queue, song);
 	}
 
 	@Override
@@ -83,7 +109,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			mSongs.clear();
-			mSongs.addAll(app.user.library.getSongArrayList(mContext, mSelectedAlbumId));
+			mSongs.addAll(library.songs.fetch(mAlbum));
 			return true;
 		}
 

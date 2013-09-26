@@ -85,6 +85,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+                <activity
+            android:name="me.noslo.titanmobile.BrowsePlaylistActivity"
+            android:label="@string/playlists"
+            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.BROWSEPLAYLIST" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

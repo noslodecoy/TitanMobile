@@ -1,5 +1,6 @@
 package me.noslo.titanmobile;
 
+import me.noslo.titanmobile.bll.Playlist;
 import me.noslo.titanmobile.bll.PlaylistItem;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -25,10 +26,11 @@ import android.content.Intent;
 public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener,
 		OnSeekBarChangeListener {
 
-	private ListView mSongList;
+	private ListView mPlaylistView;
 	private SeekBar progressBar;
 	private RetrieveQueueTask queueTask;
-	PlayListItemAdapter mAdapter;
+	private MediaLibraryAdapter mAdapter;
+	private Playlist mPlaylist;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +44,25 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		// queueTask = new RetrieveQueueTask();
 		// queueTask.execute((Void)null);
 
+
 	}
 
+	
+	private void fillList() {
+		mPlaylistView = (ListView) findViewById(R.id.currentlyPlayingQueue);
+		mAdapter = new MediaLibraryAdapter(this, app.queue);
+		mPlaylistView.setAdapter(mAdapter);
+		mPlaylistView.setOnItemClickListener(this);
+		mPlaylistView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		registerForContextMenu(mPlaylistView);
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		app.queue.addReplaceAll( library.playlistItems.fetch(app.queue) );
-		mAdapter.notifyDataSetChanged();
+		library.playlistItems.populate(app.queue);
+		// app.queue.addReplaceAll( library.playlistItems.populate(app.queue) );
+		//mAdapter.notifyDataSetChanged();
 
 		drawPlayBtn();
 	}
@@ -182,25 +195,18 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 
 	protected void removeQueueItem(PlaylistItem song) {
 		// user.queue.remove(song);
-		
-		library.playlistItems.removeFrom( app.queue, song);
-		app.queue.remove( song );
-		mAdapter.notifyDataSetChanged();
+
+		library.playlistItems.removeFrom(app.queue, song);
+		app.queue.remove(song);
+		//mAdapter.notifyDataSetChanged();
 	}
 
 	protected PlaylistItem getListItemSong(int position) {
-		return (PlaylistItem) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter().getItem(
-				position);
+		return (PlaylistItem) ((ListView) findViewById(R.id.currentlyPlayingQueue)).getAdapter()
+				.getItem(position);
 	}
 
-	private void fillList() {
-		mSongList = (ListView) findViewById(R.id.currentlyPlayingQueue);
-		mAdapter = new PlayListItemAdapter(this, R.layout.song_list_item, app.queue.getAll());
-		mSongList.setAdapter(mAdapter);
-		mSongList.setOnItemClickListener(this);
-		mSongList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		registerForContextMenu(mSongList);
-	}
+
 
 	private Handler mHandler = new Handler();
 

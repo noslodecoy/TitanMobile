@@ -2,7 +2,7 @@ package me.noslo.titanmobile.bll;
 
 import android.net.Uri;
 
-public class PlaylistItem extends Song {
+public class PlaylistItem extends Song implements MediaLibraryItem {
 
 	private long mSongId;
 

@@ -2,7 +2,7 @@ package me.noslo.titanmobile.bll;
 
 import android.net.Uri;
 
-public class Song implements MediaLibraryObject {
+public class Song implements MediaLibraryItem {
 
 	private long id;
 	private String artistName;
@@ -17,6 +17,7 @@ public class Song implements MediaLibraryObject {
 	public Song(long songId, String artistName, String albumName, int songTrackNumber, String songName, String fileName) {
 		setId(songId);
 		setAlbumName(albumName);
+		setArtistName(artistName);
 		setTrackNumber(songTrackNumber);
 		setName(songName);
 		setFileName(fileName);
@@ -70,8 +71,8 @@ public class Song implements MediaLibraryObject {
 		return this.name;
 	}
 
-	public String getArtistAlbum() {
-		return this.getAlbumName() + " - " + this.getAlbumName();
+	public String getMeta() {
+		return this.getArtistName() + " - " + this.getAlbumName();
 	}
 
 	public String getFileName() {

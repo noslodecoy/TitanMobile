@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.MediaLibraryItem;
 
 public interface AlbumDAO {
 
 	public Album load(long id);
 
-	public ArrayList<Album> fetchAll();
+	public ArrayList<MediaLibraryItem> fetchAll();
 
-	public ArrayList<Album> fetch(Artist artist);
+	public ArrayList<MediaLibraryItem> fetch(Artist artist);
 }

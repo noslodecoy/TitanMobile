@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Playlist;
+import me.noslo.titanmobile.bll.PlaylistItem;
 import me.noslo.titanmobile.bll.Song;
+import me.noslo.titanmobile.bll.MediaLibraryItem;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -27,9 +30,8 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 	private Album mAlbum;
 	private FetchSongsTask mFetchSongsTask;
 	private ListView mList;
-	private ArrayList<Song> mSongs;
-	private Context mContext;
-	SongListAdapter mAdapter;
+	private ArrayList<MediaLibraryItem> mSongs;
+	MediaLibraryAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		setContentView(R.layout.activity_browse_library);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		mSongs = new ArrayList<Song>();
-		mContext = this;
+		mSongs = new ArrayList<MediaLibraryItem>();
 		getAlbum();
 		fillList();
 	}
@@ -54,7 +55,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 
 	private void fillList() {
 		mList = (ListView) findViewById(R.id.browseLibraryListView);
-		mAdapter = new SongListAdapter(this, R.layout.song_list_item, mSongs);
+		mAdapter = new MediaLibraryAdapter(this, mSongs);
 		mList.setAdapter(mAdapter);
 		registerForContextMenu(mList);
 		if (mFetchSongsTask == null) {
@@ -85,7 +86,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 		}
 	}
 	
-	private void showAddToPlaylistDialog( Song song) {
+	private void showAddToPlaylistDialog( MediaLibraryItem song) {
 		Bundle bundle = new Bundle();
 		bundle.putLong( "song_id", song.getId() );
 		
@@ -95,8 +96,8 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
         dialog.show(getFragmentManager(), "NoticeDialogFragment");
 	}
 
-	protected void addQueueItem(Song song) {
-		library.playlistItems.addTo(app.queue, song);
+	protected void addQueueItem(MediaLibraryItem song) {
+		library.playlistItems.addTo(app.queue, (PlaylistItem)song);
 	}
 
 	@Override

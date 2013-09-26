@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import me.noslo.titanmobile.bll.Album;
 import me.noslo.titanmobile.bll.Artist;
-import me.noslo.titanmobile.bll.Playlist;
+import me.noslo.titanmobile.bll.MediaLibraryItem;
 import me.noslo.titanmobile.dal.mediaLibrary.AlbumDAO;
-import me.noslo.titanmobile.dal.mediaLibrary.ArtistDAO;
-import android.content.ContentResolver;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -28,13 +27,13 @@ public class MediaStoreAlbumDAO implements AlbumDAO {
 		mUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
 	}
 
-	public ArrayList<Album> fetchAll() {
+	public ArrayList<MediaLibraryItem> fetchAll() {
 		return fetch(null, null, MediaStore.Audio.Media.ALBUM_KEY);
 	}
 
-	private ArrayList<Album> fetch(String selectionClause, String[] selectionArgs, String sortOrder) {
+	private ArrayList<MediaLibraryItem> fetch(String selectionClause, String[] selectionArgs, String sortOrder) {
 
-		ArrayList<Album> albums = new ArrayList<Album>();
+		ArrayList<MediaLibraryItem> albums = new ArrayList<MediaLibraryItem>();
 
 		Cursor cursor = mContext.getContentResolver().query(mUri, PROJECTION_ALBUM,
 				selectionClause, selectionArgs, sortOrder);
@@ -45,12 +44,16 @@ public class MediaStoreAlbumDAO implements AlbumDAO {
 			int albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
 
 			while (cursor.moveToNext()) {
-				Album album = new Album(cursor.getLong(idIndex), cursor.getString(artistIndex), cursor.getString(albumIndex));
+				Album album = new Album(cursor.getLong(idIndex), cursor.getString(artistIndex),
+						cursor.getString(albumIndex));
 				albums.add(album);
 			}
 		} else {
 			Log.v(TAG, "Could not query all playlists");
 		}
+
+		cursor.close();
+
 		return albums;
 
 	}
@@ -60,25 +63,25 @@ public class MediaStoreAlbumDAO implements AlbumDAO {
 		String selectionClause = MediaStore.Audio.Media._ID + "=?";
 		String[] selectionArgs = { String.valueOf(id) };
 		String sortOrder = null;
-		ArrayList<Album> albums = fetch( selectionClause, selectionArgs, sortOrder );
-		if ( albums.size() > 0 ) {
-			return albums.get(0);
+		ArrayList<MediaLibraryItem> albums = fetch(selectionClause, selectionArgs, sortOrder);
+		if (albums.size() > 0) {
+			return (Album) albums.get(0);
 		}
 		return null;
 	}
 
 	@Override
-	public ArrayList<Album> fetch(Artist artist) {
-		if ( artist == null ) {
+	public ArrayList<MediaLibraryItem> fetch(Artist artist) {
+		if (artist == null) {
 			return fetchAll();
 		}
-		
-		ArrayList<Album> albums = new ArrayList<Album>();
-		
+
+		ArrayList<MediaLibraryItem> albums = new ArrayList<MediaLibraryItem>();
+
 		Uri uri = MediaStore.Audio.Artists.Albums.getContentUri("external", artist.getId());
 
-		Cursor cursor = mContext.getContentResolver().query(uri, PROJECTION_ALBUM,
-				null, null, MediaStore.Audio.Media.ALBUM_KEY);
+		Cursor cursor = mContext.getContentResolver().query(uri, PROJECTION_ALBUM, null, null,
+				MediaStore.Audio.Media.ALBUM_KEY);
 
 		if (cursor != null) {
 			int idIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
@@ -86,12 +89,16 @@ public class MediaStoreAlbumDAO implements AlbumDAO {
 			int albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
 
 			while (cursor.moveToNext()) {
-				Album album = new Album(cursor.getLong(idIndex), cursor.getString(artistIndex), cursor.getString(albumIndex));
+				Album album = new Album(cursor.getLong(idIndex), cursor.getString(artistIndex),
+						cursor.getString(albumIndex));
 				albums.add(album);
 			}
 		} else {
 			Log.v(TAG, "Could not query all playlists");
 		}
+
+		cursor.close();
+
 		return albums;
 	}
 

@@ -29,7 +29,7 @@ public class MediaQueuePlayer {
 	public Song getSong() {
 		if (mQueue.size() > 0 && getPosition() < mQueue.size()
 				&& getPosition() >= 0) {
-			return mQueue.get(mPlaylistIndex);
+			return (Song)mQueue.get(mPlaylistIndex);
 		}
 		return null;
 	}

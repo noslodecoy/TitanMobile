@@ -53,6 +53,7 @@ public class MediaStorePlaylistDAO implements PlaylistDAO {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -73,15 +74,19 @@ public class MediaStorePlaylistDAO implements PlaylistDAO {
 			int nameIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME);
 			cursor.moveToFirst();
 			Playlist playlist = new Playlist(cursor.getLong(idIndex), cursor.getString(nameIndex));
-			Log.d(TAG, "Loaded: "+playlist.getId());
+			Log.d(TAG, "Loaded: " + playlist.getId());
 
 			Log.d(TAG, "Getting Playlist items");
-			playlist.addReplaceAll( mLibrary.playlistItems.fetch(playlist) );
+			mLibrary.playlistItems.populate(playlist);
+			// playlist.addReplaceAll( mLibrary.playlistItems.fetch(playlist) );
+			cursor.close();
 
 			return playlist;
 		} else {
 			Log.v(TAG, "Could not query playlist");
 		}
+		cursor.close();
+
 		return null;
 	}
 
@@ -123,15 +128,17 @@ public class MediaStorePlaylistDAO implements PlaylistDAO {
 		} else {
 			Log.v(TAG, "Could not query all playlists");
 		}
+		cursor.close();
+
 		return playlists;
 	}
 
 	@Override
 	public boolean delete(Playlist playlist) {
-		String selection = MediaStore.Audio.Playlists._ID+"=?";
-		String selectionArgs[] = { String.valueOf( playlist.getId() ) };
-		int rows = mContext.getContentResolver().delete( mUri, selection, selectionArgs );
-		if ( rows > 0 ) {
+		String selection = MediaStore.Audio.Playlists._ID + "=?";
+		String selectionArgs[] = { String.valueOf(playlist.getId()) };
+		int rows = mContext.getContentResolver().delete(mUri, selection, selectionArgs);
+		if (rows > 0) {
 			return true;
 		}
 		return false;

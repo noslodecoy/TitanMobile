@@ -3,6 +3,7 @@ package me.noslo.titanmobile.dal.mediaLibrary.mediaStore;
 import java.util.ArrayList;
 
 import me.noslo.titanmobile.bll.Artist;
+import me.noslo.titanmobile.bll.MediaLibraryItem;
 import me.noslo.titanmobile.bll.Playlist;
 import me.noslo.titanmobile.dal.mediaLibrary.ArtistDAO;
 import android.content.ContentResolver;
@@ -26,13 +27,13 @@ public class MediaStoreArtistDAO implements ArtistDAO {
 		mUri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
 	}
 
-	public ArrayList<Artist> fetchAll() {
+	public ArrayList<MediaLibraryItem> fetchAll() {
 		return fetch(null, null, MediaStore.Audio.Media.ARTIST_KEY);
 	}
 
-	private ArrayList<Artist> fetch(String selectionClause, String[] selectionArgs, String sortOrder) {
+	private ArrayList<MediaLibraryItem> fetch(String selectionClause, String[] selectionArgs, String sortOrder) {
 
-		ArrayList<Artist> artists = new ArrayList<Artist>();
+		ArrayList<MediaLibraryItem> artists = new ArrayList<MediaLibraryItem>();
 
 		Cursor cursor = mContext.getContentResolver().query(mUri, PROJECTION_ARTIST,
 				selectionClause, selectionArgs, sortOrder);
@@ -48,6 +49,8 @@ public class MediaStoreArtistDAO implements ArtistDAO {
 		} else {
 			Log.v(TAG, "Could not query all playlists");
 		}
+		cursor.close();
+
 		return artists;
 
 	}
@@ -55,7 +58,7 @@ public class MediaStoreArtistDAO implements ArtistDAO {
 	@Override
 	public Artist load(long id) {
 		String selectionClause = MediaStore.Audio.Media._ID + "=?";
-		String[] selectionArgs = { String.valueOf( id ) };
+		String[] selectionArgs = { String.valueOf(id) };
 		String sortOrder = null;
 
 		Cursor cursor = mContext.getContentResolver().query(mUri, PROJECTION_ARTIST,
@@ -67,8 +70,11 @@ public class MediaStoreArtistDAO implements ArtistDAO {
 			int idIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
 			int nameIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
 			cursor.moveToFirst();
-			return new Artist(cursor.getLong(idIndex), cursor.getString(nameIndex));
+			Artist artist = new Artist(cursor.getLong(idIndex), cursor.getString(nameIndex));
+			cursor.close();
+			return artist;
 		}
+		cursor.close();
 		return null;
 	}
 

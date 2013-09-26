@@ -54,6 +54,8 @@ public class MediaStoreSongDAO implements SongDAO {
 		} else {
 			Log.v(TAG, "Could not fetch songs");
 		}
+		cursor.close();
+
 		return songs;
 
 	}
@@ -64,7 +66,7 @@ public class MediaStoreSongDAO implements SongDAO {
 		String[] selectionArgs = { String.valueOf(id) };
 		String sortOrder = null;
 		ArrayList<Song> songs = fetch(selectionClause, selectionArgs, sortOrder);
-		if ( songs.size() > 0 ) {
+		if (songs.size() > 0) {
 			return songs.get(0);
 		}
 		return null;

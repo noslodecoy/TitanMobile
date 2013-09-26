@@ -1,6 +1,6 @@
 package me.noslo.titanmobile.bll;
 
-public class Album implements MediaLibraryObject {
+public class Album implements MediaLibraryItem {
 
 	private long id;
 	private String name;
@@ -25,6 +25,10 @@ public class Album implements MediaLibraryObject {
 
 	public long getId() {
 		return id;
+	}
+	
+	public String getMeta() {
+		return getArtistName();
 	}
 	
 	@Override

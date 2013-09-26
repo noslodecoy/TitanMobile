@@ -1,6 +1,6 @@
 package me.noslo.titanmobile.bll;
 
-public class Artist implements MediaLibraryObject {
+public class Artist implements MediaLibraryItem {
 
 	private long id;
 	private String name;
@@ -19,6 +19,10 @@ public class Artist implements MediaLibraryObject {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getMeta() {
+		return getName();
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,13 +30,18 @@ public class SelectPlaylistDialogFragment extends DialogFragment implements OnCl
 	ArrayList<Playlist> mPlaylists;
 	private PlaylistListAdapter mAdapter;
 	private Song mSong;
+	private Playlist mNewPlaylist;
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+		mNewPlaylist = new Playlist("New Playlist");
+		
 		mPlaylists = ((TitanPlayerApplication) this.getActivity()
 				.getApplication()).library.playlists.fetchAll();
 
+		mPlaylists.add(0, mNewPlaylist);
+		
 	    mSong = new Song( getArguments().getLong("song_id") );
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -59,7 +65,15 @@ public class SelectPlaylistDialogFragment extends DialogFragment implements OnCl
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		Playlist playlist = mAdapter.getItem(which);
-		((TitanPlayerActivity)this.getActivity()).library.playlistItems.addTo(playlist, mSong);
+		if ( playlist == mNewPlaylist ) {
+			Bundle bundle = new Bundle();
+			bundle.putLong( "song_id", mSong.getId() );
+	        DialogFragment newDialog = new NewPlaylistDialogFragment();
+	        newDialog.setArguments( bundle );
+	        newDialog.show(getFragmentManager(), "NoticeDialogFragment");
+		} else {
+			((TitanPlayerActivity)this.getActivity()).library.playlistItems.addTo(playlist, mSong);
+		}
 	}
 
 }

@@ -28,5 +28,6 @@
     <string name="add_song_to_queue">Add Song to Queue</string>
     <string name="delete_playlist">Delete Playlist</string>
     <string name="cant_delete_queue">Can\'t delete the now playing queue playlist.</string>
+    <string name="new_playlist">New Playlist</string>
     
 </resources>

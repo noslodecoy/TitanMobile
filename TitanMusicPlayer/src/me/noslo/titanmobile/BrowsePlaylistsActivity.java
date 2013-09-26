@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,10 +54,10 @@ public class BrowsePlaylistsActivity extends TitanPlayerActivity implements OnIt
 	}
 
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		// Playlist playlist = mAdapter.getItem(position);
-		// Intent intent = new Intent(this, BrowsePlaylistActivity.class);
-		// intent.putExtra(BrowseLibraryActivity.EXTRA_ALBUM, playlist.getId());
-		// startActivity(intent);
+		 Playlist playlist = mAdapter.getItem(position);
+		 Intent intent = new Intent(this, BrowsePlaylistActivity.class);
+		 intent.putExtra(BrowsePlaylistActivity.EXTRA_PLAYLIST, playlist.getId());
+		 startActivity(intent);
 	}
 
 	@Override

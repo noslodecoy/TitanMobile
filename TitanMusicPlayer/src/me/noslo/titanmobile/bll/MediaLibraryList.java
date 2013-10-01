@@ -2,8 +2,6 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public interface MediaLibraryList {
 
 	public void setName(String name);

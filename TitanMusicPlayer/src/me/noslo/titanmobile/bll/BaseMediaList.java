@@ -2,8 +2,6 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class BaseMediaList extends ArrayList<MediaLibraryItem> implements MediaLibraryList {
 
 	// private static final String TAG = "MediaLibraryList";

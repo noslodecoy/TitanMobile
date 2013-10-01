@@ -12,13 +12,13 @@
         android:targetSdkVersion="18" />
 
     <application
-        android:name="me.noslo.titanmobile.TitanPlayerApplication"
+        android:name="me.noslo.titanmobile.TitanApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="me.noslo.titanmobile.TitanMobileActivity"
+            android:name="me.noslo.titanmobile.ui.TitanMobileActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.TITANMOBILE" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.MediaPlayerActivity"
+            android:name="me.noslo.titanmobile.ui.MediaPlayerActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MUSICPLAYER" />
@@ -36,9 +36,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.BrowseLibraryActivity"
+            android:name="me.noslo.titanmobile.ui.BrowseLibraryActivity"
             android:label="@string/library"
-            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            android:parentActivityName="me.noslo.titanmobile.ui.MediaPlayerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSELIBRARY" />
 
@@ -46,9 +46,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.BrowseArtistsActivity"
+            android:name="me.noslo.titanmobile.ui.BrowseArtistsActivity"
             android:label="@string/artists"
-            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            android:parentActivityName="me.noslo.titanmobile.ui.MediaPlayerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEARTISTS" />
 
@@ -56,9 +56,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.BrowseAlbumsActivity"
+            android:name="me.noslo.titanmobile.ui.BrowseAlbumsActivity"
             android:label="@string/albums"
-            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            android:parentActivityName="me.noslo.titanmobile.ui.MediaPlayerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEALBUMS" />
 
@@ -66,7 +66,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.LoginActivity"
+            android:name="me.noslo.titanmobile.ui.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
@@ -76,9 +76,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.noslo.titanmobile.BrowsePlaylistsActivity"
+            android:name="me.noslo.titanmobile.ui.BrowsePlaylistsActivity"
             android:label="@string/playlists"
-            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            android:parentActivityName="me.noslo.titanmobile.ui.MediaPlayerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEPLAYLISTS" />
 
@@ -86,9 +86,9 @@
             </intent-filter>
         </activity>
                 <activity
-            android:name="me.noslo.titanmobile.BrowsePlaylistActivity"
+            android:name="me.noslo.titanmobile.ui.BrowsePlaylistActivity"
             android:label="@string/playlists"
-            android:parentActivityName="me.noslo.titanmobile.MediaPlayerActivity" >
+            android:parentActivityName="me.noslo.titanmobile.ui.MediaPlayerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.BROWSEPLAYLIST" />
 

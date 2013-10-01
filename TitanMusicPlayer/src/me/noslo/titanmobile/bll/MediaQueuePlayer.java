@@ -2,10 +2,8 @@ package me.noslo.titanmobile.bll;
 
 import java.io.IOException;
 
-import me.noslo.titanmobile.deprecating.SongList;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 
 public class MediaQueuePlayer {
 
@@ -25,11 +23,9 @@ public class MediaQueuePlayer {
 		mStartTime = 0;
 	}
 
-
 	public Song getSong() {
-		if (mQueue.size() > 0 && getPosition() < mQueue.size()
-				&& getPosition() >= 0) {
-			return (Song)mQueue.get(mPlaylistIndex);
+		if (mQueue.size() > 0 && getPosition() < mQueue.size() && getPosition() >= 0) {
+			return (Song) mQueue.get(mPlaylistIndex);
 		}
 		return null;
 	}
@@ -51,8 +47,7 @@ public class MediaQueuePlayer {
 				mPlayer.stop();
 			}
 
-			mPlayer = android.media.MediaPlayer.create(mContext,
-					getCurrentSong().getFileUri());
+			mPlayer = android.media.MediaPlayer.create(mContext, getCurrentSong().getFileUri());
 			try {
 				mPlayer.prepare();
 			} catch (IllegalStateException e) {
@@ -134,56 +129,60 @@ public class MediaQueuePlayer {
 	}
 
 	public void pause() {
-		//long resumeTime = getTime();
+		// long resumeTime = getTime();
 		stop();
-		//startTime = resumeTime;
+		// startTime = resumeTime;
 	}
 
 	public void seekToPosition(double percent) {
-			double length = 0;
-			long time = (long) (length * percent);
-			seekToTime(time);
+		double length = 0;
+		long time = (long) (length * percent);
+		seekToTime(time);
 	}
 
 	public void seekToTime(long time) {
-			boolean wasPlaying = mIsPlaying;
-			mStartTime = time;
-			if (wasPlaying) {
-				mIsPlaying = true;
-			} else {
-			}
+		boolean wasPlaying = mIsPlaying;
+		mStartTime = time;
+		if (wasPlaying) {
+			mIsPlaying = true;
+		} else {
+		}
 	}
 
-
 	public String getFormatedTime() {
-//		long timeMillis = getTime();
-//		long time = timeMillis / 1000;
-//		String seconds = Integer.toString((int) (time % 60));
-//		String minutes = Integer.toString((int) ((time % 3600) / 60));
-//		String hours = Integer.toString((int) (time / 3600));
-//		for (int i = 0; i < 2; i++) {
-//			if (seconds.length() < 2) {
-//				seconds = "0" + seconds;
-//			}
-//			if (minutes.length() < 2) {
-//				minutes = "0" + minutes;
-//			}
-//			if (hours.length() < 2) {
-//				hours = "0" + hours;
-//			}
-//		}
-//		return hours + ":" + minutes + ":" + seconds;
+		// long timeMillis = getTime();
+		// long time = timeMillis / 1000;
+		// String seconds = Integer.toString((int) (time % 60));
+		// String minutes = Integer.toString((int) ((time % 3600) / 60));
+		// String hours = Integer.toString((int) (time / 3600));
+		// for (int i = 0; i < 2; i++) {
+		// if (seconds.length() < 2) {
+		// seconds = "0" + seconds;
+		// }
+		// if (minutes.length() < 2) {
+		// minutes = "0" + minutes;
+		// }
+		// if (hours.length() < 2) {
+		// hours = "0" + hours;
+		// }
+		// }
+		// return hours + ":" + minutes + ":" + seconds;
 		return null;
 	}
 
 	public int getProgressPercent() {
-		int percent = (mPlayer.getCurrentPosition() * 100 / mPlayer.getDuration());
-		return percent;
+		if (mPlayer != null) {
+			int percent = (mPlayer.getCurrentPosition() * 100 / mPlayer.getDuration());
+			return percent;
+		}
+		return 0;
 	}
 
 	public void setProgressPercent(int progress) {
-		int currentLocation = (mPlayer.getDuration()*progress / 100 );
-        mPlayer.seekTo(currentLocation);
+		if (mPlayer != null) {
+			int currentLocation = (mPlayer.getDuration() * progress / 100);
+			mPlayer.seekTo(currentLocation);
+		}
 	}
 
 }

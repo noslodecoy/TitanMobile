@@ -1,11 +1,5 @@
 package me.noslo.titanmobile.bll;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import me.noslo.titanmobile.deprecating.MediaLibrary;
-import me.noslo.titanmobile.deprecating.SongQueue;
 
 public class User {
 
@@ -20,6 +14,10 @@ public class User {
 
 	public void setUserName(String username) {
 		mUsername = username;
+	}
+
+	public boolean isLoggedIn() {
+		return (mUsername != null);
 	}
 
 }

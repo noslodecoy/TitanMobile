@@ -12,22 +12,23 @@
     android:textAlignment="center"
     tools:context=".MediaPlayerActivity" >
 
-    <include
-        android:id="@+id/musicControls"
+    <fragment
+        android:id="@+id/media_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        layout="@layout/music_controls" />
+        class="me.noslo.titanmobile.ui.PlayerControlsFragment" >
+    </fragment>
 
-    <ListView
-        android:id="@+id/currentlyPlayingQueue"
+        <fragment
+        android:id="@+id/currently_playing_queue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/musicControls"
+        android:layout_above="@+id/media_controls"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:choiceMode="singleChoice" >
-    </ListView>
-
+        class="me.noslo.titanmobile.ui.PlaylistFragment" >
+    </fragment>
+    
 </RelativeLayout>

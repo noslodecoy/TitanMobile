@@ -1,15 +1,13 @@
 package me.noslo.titanmobile.bll;
 
-import android.net.Uri;
-
 public class PlaylistItem extends Song implements MediaLibraryItem {
 
 	private long mSongId;
 
 	public PlaylistItem() {
 	}
-	
-	public PlaylistItem( Song song ) {
+
+	public PlaylistItem(Song song) {
 		setSongId(song.getId());
 		setAlbumName(song.getAlbumName());
 		setTrackNumber(song.getTrackNumber());
@@ -17,7 +15,8 @@ public class PlaylistItem extends Song implements MediaLibraryItem {
 		setFileName(song.getFileName());
 	}
 
-	public PlaylistItem(long playlistId, long songId, String artistName, String albumName, int songTrackNumber, String songName, String fileName) {
+	public PlaylistItem(long playlistId, long songId, String artistName, String albumName,
+			int songTrackNumber, String songName, String fileName) {
 		setId(playlistId);
 		setSongId(songId);
 		setAlbumName(albumName);
@@ -25,11 +24,11 @@ public class PlaylistItem extends Song implements MediaLibraryItem {
 		setName(songName);
 		setFileName(fileName);
 	}
-	
-	public void setSongId( long songId ) {
-		mSongId = songId;
 
+	public void setSongId(long songId) {
+		mSongId = songId;
 	}
+
 	public long getSongId() {
 		return this.mSongId;
 	}

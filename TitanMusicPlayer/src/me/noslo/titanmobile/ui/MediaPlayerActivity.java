@@ -13,7 +13,7 @@ import android.content.Intent;
 
 public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemClickListener {
 
-	//private static final String TAG = "MediaPlayerActivity";
+	// private static final String TAG = "MediaPlayerActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,6 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		library.playlistItems.populate(app.queue);
 	}
 
 	@Override
@@ -59,6 +58,16 @@ public class MediaPlayerActivity extends TitanPlayerActivity implements OnItemCl
 		}
 		case R.id.action_browse_playlists: {
 			Intent intent = new Intent(this, BrowsePlaylistsActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		case R.id.action_store: {
+			Intent intent = new Intent(this, StoreActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		case R.id.action_settings: {
+			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
 			return true;
 		}

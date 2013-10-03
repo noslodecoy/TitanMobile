@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="snippet_mode"
+        android:title="@string/pref_title_use_snippet_mode" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_snippet_time"
+        android:dependency="snippet_mode"
+        android:inputType="number"
+        android:key="snippet_time"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_snippet_time" />
+
+</PreferenceScreen>

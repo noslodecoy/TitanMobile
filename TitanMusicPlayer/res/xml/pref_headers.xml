@@ -1,0 +1,12 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="me.noslo.titanmobile.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" />
+    <header
+        android:fragment="me.noslo.titanmobile.SettingsActivity$AccountPreferenceFragment"
+        android:title="@string/pref_header_account" />
+
+</preference-headers>

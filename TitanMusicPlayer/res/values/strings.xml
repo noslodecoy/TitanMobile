@@ -29,5 +29,9 @@
     <string name="delete_playlist">Delete Playlist</string>
     <string name="cant_delete_queue">Can\'t delete the now playing queue playlist.</string>
     <string name="new_playlist">New Playlist</string>
+    <string name="email_song">Email Song</string>
+    <string name="store">Store</string>
+    <string name="buy_music">Buy Music</string>
+    <string name="store_url">https://angel.spcollege.edu/AngelUploads/Content/COP2660_4492_0475/_assoc/2CF4D45C3AC9447EA440849269FC0814/music_store/index.html</string>
     
 </resources>

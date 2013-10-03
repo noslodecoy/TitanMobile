@@ -10,7 +10,6 @@ import me.noslo.titanmobile.bll.Song;
 import me.noslo.titanmobile.dal.AlbumDao;
 import me.noslo.titanmobile.dal.PlaylistDao;
 import me.noslo.titanmobile.dal.SongDao;
-import me.noslo.titanmobile.utils.LibraryUtils;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -99,7 +98,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 
 	protected void addQueueItem(MediaLibraryItem song) {
 		PlaylistDao playlistDao = TitanApp.libraryDao.newPlaylistDao();
-		playlistDao.addMember(LibraryUtils.getQueue(getApplication()), (Song) song);
+		playlistDao.addMember( app.mediaPlayer.getQueue(), (Song) song);
 	}
 
 	@Override

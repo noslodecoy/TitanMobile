@@ -9,4 +9,9 @@
         android:showAsAction="never"
         android:title="@string/add_to_playlist"/>
 
+        <item
+        android:id="@+id/email_song"
+        android:showAsAction="never"
+        android:title="@string/email_song"/>
+    
 </menu>

@@ -5,6 +5,7 @@ import me.noslo.titanmobile.TitanApp;
 import me.noslo.titanmobile.bll.Playlist;
 import me.noslo.titanmobile.bll.PlaylistItem;
 import me.noslo.titanmobile.dal.PlaylistDao;
+import me.noslo.titanmobile.dal.PlaylistMemberDao;
 
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -78,6 +79,9 @@ public class PlaylistFragment extends ListFragment implements OnItemClickListene
 
 	protected void removeQueueItem(PlaylistItem song) {
 		mPlaylist.remove(song);
+		PlaylistMemberDao playlistMemberDao = TitanApp.libraryDao.newPlaylistMemberDao();
+		playlistMemberDao.removeFrom(mApp.mediaPlayer.getQueue(), song);
+		
 		mAdapter.notifyDataSetChanged();
 	}
 

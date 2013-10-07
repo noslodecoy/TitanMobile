@@ -47,18 +47,12 @@ public class MediaQueuePlayer {
 				mPlayer.stop();
 			}
 
-			mPlayer = android.media.MediaPlayer.create(mContext, getCurrentSong().getFileUri());
 			try {
-				mPlayer.prepare();
+				mPlayer = android.media.MediaPlayer.create(mContext, getCurrentSong().getFileUri());
+				mPlayer.start();
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			mPlayer.start();
 
 			return;
 		}

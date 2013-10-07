@@ -1,6 +1,6 @@
 package me.noslo.titanmobile.bll;
 
-public class Playlist extends BaseMediaList {
+public class Playlist extends SimpleMediaList {
 
 	private static final long serialVersionUID = -5221165637894343526L;
 	private String mName;

@@ -2,7 +2,7 @@ package me.noslo.titanmobile.bll;
 
 import java.util.ArrayList;
 
-public class BaseMediaList extends ArrayList<MediaLibraryItem> implements MediaLibraryList {
+public class SimpleMediaList extends ArrayList<MediaLibraryItem> implements MediaLibraryList {
 
 	// private static final String TAG = "MediaLibraryList";
 
@@ -10,17 +10,17 @@ public class BaseMediaList extends ArrayList<MediaLibraryItem> implements MediaL
 	private String mName;
 	private long mId;
 
-	public BaseMediaList() {
+	public SimpleMediaList() {
 		mId = -1;
 		mName = "Unknown";
 	}
 
-	public BaseMediaList(String name) {
+	public SimpleMediaList(String name) {
 		mId = -1;
 		mName = name;
 	}
 
-	public BaseMediaList(long id, String name) {
+	public SimpleMediaList(long id, String name) {
 		mId = id;
 		mName = name;
 	}

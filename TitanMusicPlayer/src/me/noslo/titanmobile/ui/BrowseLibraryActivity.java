@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import me.noslo.titanmobile.R;
 import me.noslo.titanmobile.TitanApp;
 import me.noslo.titanmobile.bll.Album;
+import me.noslo.titanmobile.bll.Artist;
 import me.noslo.titanmobile.bll.MediaLibraryItem;
 import me.noslo.titanmobile.bll.Song;
 import me.noslo.titanmobile.dal.AlbumDao;
@@ -15,16 +16,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.Toast;
 
-public class BrowseLibraryActivity extends TitanPlayerActivity {
+public class BrowseLibraryActivity extends TitanPlayerActivity implements OnItemClickListener {
 	public static final String EXTRA_ALBUM = "me.noslo.titanmobile.extra.ALBUM";
 
 	private Album mAlbum;
@@ -32,6 +39,8 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 	private ListView mList;
 	private ArrayList<MediaLibraryItem> mSongs;
 	private MediaLibraryAdapter mAdapter;
+	
+	private static final String TAG = "BrowseLibraryActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,7 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 			mFetchSongsTask = new FetchSongsTask();
 			mFetchSongsTask.execute((Void) null);
 		}
+		mList.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -86,6 +96,12 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+		Log.d( TAG, "Library item clicked (id: "+id+", position: " + position+")" );
+		addQueueItem(mAdapter.getItem(position));
+	}
 
 	private void showAddToPlaylistDialog(MediaLibraryItem song) {
 		Bundle bundle = new Bundle();
@@ -99,6 +115,9 @@ public class BrowseLibraryActivity extends TitanPlayerActivity {
 	protected void addQueueItem(MediaLibraryItem song) {
 		PlaylistDao playlistDao = TitanApp.libraryDao.newPlaylistDao();
 		playlistDao.addMember( app.mediaPlayer.getQueue(), (Song) song);
+		
+		Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.song_added_to_queue), Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 	@Override

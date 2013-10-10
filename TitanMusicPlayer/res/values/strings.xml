@@ -33,5 +33,8 @@
     <string name="store">Store</string>
     <string name="buy_music">Buy Music</string>
     <string name="store_url">https://angel.spcollege.edu/AngelUploads/Content/COP2660_4492_0475/_assoc/2CF4D45C3AC9447EA440849269FC0814/music_store/index.html</string>
+    <string name="song_added_to_queue">Song has been added to Queue</string>
+    <string name="songs_added_to_queue">Songs have been added to Queue</string>
+    
     
 </resources>
